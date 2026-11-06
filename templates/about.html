@@ -331,9 +331,11 @@
 
         <div class="sidebar">
 
-            <img class="company-logo"
-                 src="{{ url_for('static', filename='images/Unsolved_Metrics_Website_Logo.png') }}"
-                 alt="Unsolved Metrics Logo">
+           <a href="{{ url_for('home') }}">
+    <img class="company-logo"
+         src="{{ url_for('static', filename='images/Unsolved_Metrics_Website_Logo.png') }}"
+         alt="Unsolved Metrics Logo">
+</a>
 
             <a class="menu-item" href="{{ url_for('home') }}">
                 <i class="fa-solid fa-house"></i>
