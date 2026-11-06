@@ -1,0 +1,70 @@
+
+.about-content {
+    padding: 24px;
+    color: white;
+}
+
+.about-heading {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.about-heading i {
+    color: #e50914;
+    font-size: 32px;
+}
+
+.about-heading h1 {
+    margin: 0;
+}
+
+.about-heading p {
+    color: #9aabc0;
+}
+
+.about-panel,
+.about-card {
+    background: #101925;
+    border: 1px solid #293544;
+    border-radius: 12px;
+    padding: 22px;
+}
+
+.about-panel {
+    margin-bottom: 18px;
+}
+
+.about-panel p,
+.about-card p {
+    color: #b8c6d7;
+    line-height: 1.6;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.about-card i {
+    color: #e50914;
+    font-size: 24px;
+}
+
+.about-card h3 {
+    margin-bottom: 8px;
+}
+
+.about-disclaimer {
+    margin-top: 22px;
+    color: #9aabc0;
+    font-size: 13px;
+}
+
+@media (max-width: 650px) {
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+}

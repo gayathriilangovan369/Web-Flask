@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Intelligence · Unsolved Metrics</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Michroma&display=swap">
+
+    <style>
+        body {
+            background-color: #0B1423;
+            font-family: 'Outfit', Arial, sans-serif;
+            margin: 0;
+        }
+
+        .page-layout {
+            display: flex;
+        }
+
+        .sidebar {
+            background-color: #0B1423;
+            width: 290px;
+            height: 100vh;
+            border-right: 1px solid #34465D;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .company-logo {
+            width: 300px;
+            height: auto;
+            display: block;
+            margin: 12px auto 20px;
+        }
+
+        .menu-item {
+            display: block;
+            text-decoration: none;
+            color: #D5DCE5;
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            margin-top: 0;
+            margin-bottom: 5px;
+            margin-left: 10px;
+            margin-right: 10px;
+            padding: 16px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .menu-item:hover {
+            background-color: #263B54;
+            color: white;
+        }
+
+        .menu-item i {
+            display: inline-block;
+            width: 28px;
+            text-align: center;
+            margin-right: 10px;
+            color: #92A3BA;
+        }
+
+        .menu-item:hover i {
+            color: white;
+        }
+
+        .main-content {
+            background-color: #0B1423;
+            width: 100%;
+            padding: 30px;
+            min-width: 0;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Michroma', Arial, sans-serif;
+            font-weight: 400;
+            color: white;
+        }
+
+        /* ---------- shared pieces (same as the Home page) ---------- */
+
+        .box {
+            background-color: #0F1B2E;
+            border: 1px solid #22344D;
+            border-radius: 14px;
+            padding: 24px;
+        }
+
+        .row {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .grey-text {
+            color: #92A3BA;
+        }
+
+        /* ---------- banner (Netflix show page style) ---------- */
+
+        .banner {
+            border: 1px solid #22344D;
+            border-radius: 16px;
+            padding: 52px 48px;
+            margin-bottom: 20px;
+            background:
+                linear-gradient(90deg, #0B1423 0%, rgba(11, 20, 35, 0.85) 45%, rgba(11, 20, 35, 0) 100%),
+                radial-gradient(60% 120% at 85% 40%, #1F4FA8 0%, #13284A 45%, #0B1423 80%);
+        }
+
+        .banner-label {
+            color: #6FD3FF;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            margin: 0;
+        }
+
+        .banner h1 {
+            font-size: 46px;
+            line-height: 1.15;
+            margin: 14px 0 16px 0;
+        }
+
+        .top-badge {
+            display: flex;
+            align-items: center;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .top-badge span {
+            background-color: #2F7BFF;
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            line-height: 1.1;
+            text-align: center;
+            padding: 4px 6px;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .banner-meta {
+            display: flex;
+            align-items: center;
+            color: #B8C4D4;
+            font-size: 15px;
+            margin-bottom: 16px;
+        }
+
+        .banner-meta span {
+            margin-right: 14px;
+        }
+
+        .banner-meta .red {
+            color: #F87171;
+            font-weight: 700;
+        }
+
+        .banner-meta .outline {
+            border: 1px solid #6FD3FF;
+            color: #6FD3FF;
+            border-radius: 4px;
+            padding: 0 7px;
+            font-size: 12px;
+        }
+
+        .banner-text {
+            color: #D5DCE5;
+            font-size: 17px;
+            line-height: 1.5;
+            max-width: 640px;
+            margin: 0;
+        }
+
+        /* ---------- stat tiles ---------- */
+
+        .stat {
+            width: 25%;
+            margin-right: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background-color: #13284A;
+            color: #6FD3FF;
+            font-size: 19px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 14px;
+            flex-shrink: 0;
+        }
+
+        .stat p {
+            margin: 0;
+        }
+
+        .stat-number {
+            color: white;
+            font-size: 26px;
+            font-weight: 600;
+        }
+
+        /* ---------- section headings ---------- */
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            margin: 34px 0 16px 0;
+        }
+
+        .section-number {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background-color: #2F7BFF;
+            color: white;
+            font-family: 'Michroma', Arial, sans-serif;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .section-head h2 {
+            font-size: 22px;
+            margin: 0;
+        }
+
+        .section-head p {
+            margin: 4px 0 0 0;
+        }
+
+        .question {
+            color: #6FD3FF;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            margin: 0;
+        }
+
+        /* ---------- tables ---------- */
+
+        .table-area {
+            border: 1px solid #22344D;
+            border-radius: 12px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+
+        th {
+            background-color: #13223A;
+            color: #92A3BA;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            text-align: left;
+            padding: 12px 16px;
+        }
+
+        td {
+            color: #D5DCE5;
+            padding: 12px 16px;
+            border-top: 1px solid #22344D;
+        }
+
+        tr:hover td {
+            background-color: #13223A;
+        }
+
+        .highlight td {
+            background-color: #11302A;
+            color: white;
+            font-weight: 600;
+        }
+
+        .danger-row td {
+            background-color: #2A1820;
+            color: white;
+            font-weight: 600;
+        }
+
+        .white {
+            color: white;
+            font-weight: 600;
+        }
+
+        .red {
+            color: #F87171;
+            font-weight: 600;
+        }
+
+        .green {
+            color: #34D399;
+            font-weight: 600;
+        }
+
+        .tag-red {
+            color: #F87171;
+            background-color: #2A1820;
+            border: 1px solid #F87171;
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .tag-grey {
+            color: #92A3BA;
+            background-color: #13223A;
+            border: 1px solid #34465D;
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .tag-green {
+            color: #34D399;
+            background-color: #11302A;
+            border: 1px solid #34D399;
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* ---------- insight line ---------- */
+
+        .insight {
+            display: flex;
+            background-color: #13223A;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-top: 16px;
+            color: #D5DCE5;
+            line-height: 1.5;
+            font-size: 15px;
+        }
+
+        .insight i {
+            color: #F5B544;
+            margin-right: 12px;
+            margin-top: 3px;
+        }
+
+        /* ---------- question blocks (one per PPT question) ---------- */
+
+        .q-block {
+            margin-bottom: 20px;
+        }
+
+        .q-title {
+            font-family: 'Outfit', Arial, sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            line-height: 1.35;
+            color: white;
+            margin: 8px 0 6px 0;
+        }
+
+        .q-sub {
+            font-size: 15px;
+            margin: 0;
+        }
+
+        .facts {
+            display: flex;
+            margin-top: 16px;
+        }
+
+        .fact {
+            flex: 1;
+            background-color: #13223A;
+            border: 1px solid #22344D;
+            border-radius: 12px;
+            padding: 18px;
+            margin-right: 12px;
+        }
+
+        .fact:last-child {
+            margin-right: 0;
+        }
+
+        .fact p {
+            margin: 0;
+        }
+
+        .fact-number {
+            color: white;
+            font-size: 30px;
+            font-weight: 600;
+            margin-bottom: 6px !important;
+        }
+
+        .fact.red-box {
+            background-color: #2A1820;
+            border: 1px solid #F87171;
+        }
+
+        .fact.red-box .fact-number {
+            color: #F87171;
+        }
+
+        .fact.green-box {
+            background-color: #11302A;
+            border: 1px solid #34D399;
+        }
+
+        .fact.green-box .fact-number {
+            color: #34D399;
+        }
+
+        .note {
+            color: #B8C4D4;
+            font-size: 14px;
+            margin: 12px 0 0 0;
+        }
+
+        .insight-label {
+            color: #F5B544;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-layout">
+
+        <div class="sidebar">
+
+            <img class="company-logo"
+                 src="{{ url_for('static', filename='images/Unsolved_Metrics_Website_Logo.png') }}"
+                 alt="Unsolved Metrics Logo">
+
+            <a class="menu-item" href="{{ url_for('home') }}">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+            </a>
+
+            <a class="menu-item" href="#">
+                <i class="fa-solid fa-brain"></i>
+                Make Prediction
+            </a>
+
+            <a class="menu-item" href="{{ url_for('dataset') }}">
+                <i class="fa-solid fa-database"></i>
+                View Dataset
+            </a>
+
+            <a class="menu-item" href="{{ url_for('insights') }}" style="background-color: #263B54; color: white;">
+                <i class="fa-solid fa-chart-pie"></i>
+                Customer Intelligence
+            </a>
+
+            <a class="menu-item" href="{{ url_for('models') }}">
+                <i class="fa-solid fa-trophy"></i>
+                Model Selection
+            </a>
+
+            <a class="menu-item" href="{{ url_for('about') }}">
+                <i class="fa-solid fa-circle-info"></i>
+                About
+            </a>
+
+        </div>
+
+        <div class="main-content">
+
+            <!-- BANNER (Netflix show page style) -->
+            <div class="banner">
+                <p class="banner-label">CUSTOMER INTELLIGENCE</p>
+                <h1>The 30-Day Cliff</h1>
+
+                <div class="top-badge"><span>TOP<br>10</span> #1 finding in Customer Intelligence</div>
+
+                <div class="banner-meta">
+                    <span class="red">75% churn</span>
+                    <span class="outline">EDA</span>
+                    <span>15 questions</span>
+                    <span>5,000 subscribers</span>
+                </div>
+
+                <p class="banner-text">
+                    After 30 days without logging in, three in four Netflix subscribers cancel.
+                    Churn more than doubles at this point and holds at about 75%.
+                </p>
+            </div>
+
+
+            <!-- STAT TILES -->
+            <div class="row">
+                <div class="box stat">
+                    <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+                    <div><p class="grey-text">Customers analysed</p><p class="stat-number">5,000</p></div>
+                </div>
+                <div class="box stat">
+                    <div class="stat-icon" style="color: #F5B544;"><i class="fa-solid fa-circle-question"></i></div>
+                    <div><p class="grey-text">Business questions</p><p class="stat-number">15</p></div>
+                </div>
+                <div class="box stat">
+                    <div class="stat-icon" style="color: #F87171;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div><p class="grey-text">Churn when inactive over 30 days</p><p class="stat-number">75.39%</p></div>
+                </div>
+                <div class="box stat" style="margin-right: 0;">
+                    <div class="stat-icon" style="color: #34D399;"><i class="fa-solid fa-sack-dollar"></i></div>
+                    <div><p class="grey-text">Monthly revenue lost (inactive over 30 days)</p><p class="stat-number">$23,515.26</p></div>
+                </div>
+            </div>
+
+
+
+            <!-- ============ THE 15 BUSINESS QUESTIONS ============ -->
+            <div class="section-head">
+                <div class="section-number"><i class="fa-solid fa-magnifying-glass"></i></div>
+                <div>
+                    <h2>The 15 business questions</h2>
+                    <p class="grey-text">Each question shows what was asked, the numbers behind it, and what it means for the business.</p>
+                </div>
+            </div>
+
+            <!-- QUESTION 01 -->
+            <div class="box q-block" id="findings">
+                <p class="question">QUESTION 01 · CUSTOMER PREFERENCES</p>
+                <h3 class="q-title">What are the most and least popular plans, genres, gender and devices?</h3>
+                <p class="grey-text q-sub">Preferences are evenly spread; the widest gap appears in favourite genre.</p>
+                <div class="table-area"><table><tr><th>CATEGORY</th><th>MOST POPULAR</th><th>LEAST POPULAR</th></tr><tr><td class="white">Subscription plan</td><td>Premium · 1,697</td><td>Standard · 1,643</td></tr><tr><td class="white">Favourite genre</td><td>Drama · 905</td><td>Comedy · 656</td></tr><tr><td class="white">Device</td><td>Tablet · 1,208</td><td>Desktop · 909</td></tr><tr><td class="white">Gender</td><td>Female · 1,711</td><td>Other · 1,635</td></tr></table></div>
+                <div class="insight"><i class="fa-solid fa-lightbulb"></i><span><span class="insight-label">INSIGHT</span>Customer preferences are closely balanced. Premium (1,697) narrowly leads Standard (1,643), and the gender split is similarly close. The widest gap is in genre, where Drama (905) leads Comedy (656), while Tablet is the most used device and Desktop the least.</span></div>
+            </div>
+
+            <!-- QUESTION 02 -->
+            <div class="box q-block">
+                <p class="question">QUESTION 02 · CHURN OVERVIEW</p>
+                <h3 class="q-title">What proportion of customers stayed or left?</h3>
+                <p class="grey-text q-sub">Half of the customer base has churned.</p>
+                <div class="facts"><div class="fact red-box"><p class="fact-number">50.3%</p><p class="grey-text">2,515 customers left</p></div><div class="fact green-box"><p class="fact-number">49.7%</p><p class="grey-text">2,485 customers stayed</p></div></div><p class="note">5,000 customers in total &nbsp;|&nbsp; 1 in 2 customers churned</p>
+                <div class="insight"><i class="fa-solid fa-lightbulb"></i><span><span class="insight-label">INSIGHT</span>Churn affects one in every two customers: 2,515 customers (50.3%) left, while 2,485 (49.7%) stayed. With half of the subscriber base lost, identifying who leaves and why becomes the central question for the rest of this analysis.</span></div>
+            </div>
+
+            <!-- QUESTION 03 -->
+            <div class="box q-block">
+                <p class="question">QUESTION 03 · REVENUE AT RISK</p>
+                <h3 class="q-title">Who are the “Silent Subscribers”?</h3>
+                <p class="grey-text q-sub">Retained customers in the bottom 25% by watch hours: still paying, but barely watching.</p>
+                <div class="facts"><div class="fact"><p class="fact-number">623</p><p class="grey-text">silent subscribers among retained customers</p></div><div class="fact"><p class="fact-number">7.79 hrs</p><p class="grey-text">monthly watch-hour threshold (25th percentile)</p></div><div class="fact red-box"><p class="fact-number">$9,209.77</p><p class="grey-text">combined monthly subscription fees</p></div></div><p class="note">Silent subscribers make up 623 of the 2,485 retained customers, the bottom quarter by watch hours.</p>
+                <div class="insight"><i class="fa-solid fa-lightbulb"></i><span><span class="insight-label">INSIGHT</span>623 retained customers watch 7.79 hours a month or less, yet together they still contribute $9,209.77 in monthly fees. Their subscriptions are active, but their low engagement makes this revenue vulnerable if it turns into cancellation.</span></div>
+            </div>
+
+            <!-- QUESTION 04 -->
+            <div class="box q-block">
+                <p class="question">QUESTION 04 · REVENUE AT RISK</p>
+                <h3 class="q-title">How large is the inactive but still paying customer base?</h3>
+                <p class="grey-text q-sub">Retained subscribers who have not logged in for more than 30 days.</p>
+                <div class="facts"><div class="fact"><p class="fact-number">579</p><p class="grey-text">retained subscribers inactive for over 30 days</p></div><div class="fact red-box"><p class="fact-number">$8,591.21</p><p class="grey-text">combined monthly subscription fees</p></div></div><p class="note">These customers make up 579 of the 2,485 retained customers. More than 30 days is the inactivity level at which churn reaches 75% (Question 06).</p>
+                <div class="insight"><i class="fa-solid fa-lightbulb"></i><span><span class="insight-label">INSIGHT</span>579 customers are still subscribed but have not opened Netflix in over a month, together paying $8,591.21 a month. They sit in the same inactivity range where three in four customers have already churned, making them a priority group for re-engagement.</span></div>
+            </div>
+
+            <!-- QUESTION 05 -->
+            <div class="box q-block">
+                <p class="question">QUESTION 05 · PAYMENT BEHAVIOUR</p>
+                <h3 class="q-title">How much revenue depends on customers actively choosing to renew?</h3>
+                <p class="grey-text q-sub">Share of customers and monthly fees from manual payment methods (Gift Card and Crypto), which require customers to pay again manually.</p>
+                <div class="facts"><div class="fact"><p class="fact-number">1,905</p><p class="grey-text">manual-payment customers</p></div><div class="fact"><p class="fact-number">38.1%</p><p class="grey-text">of all customers</p></div><div class="fact red-box"><p class="fact-number">$26,404.95</p><p class="grey-text">combined monthly fees</p></div><div class="fact red-box"><p class="fact-number">38.58%</p><p class="grey-text">of total monthly fees</p></div></div>
+                <div class="insight"><i class="fa-solid fa-lightbulb"></i><span><span class="insight-label">INSIGHT</span>More than a third of the business renews by choice rather than automatically. 1,905 customers (38.1%) pay by Gift Card or Crypto, accounting for $26,404.95 a month, 38.58% of all subscription fees, revenue that continues only if each customer actively decides to pay again.</span></div>
+            </div>
+
+            <!-- QUESTION 06 -->
+            <div class="box q-block" id="q06">
+                <p class="question">QUESTION 06 · INACTIVITY DANGER ZONE</p>
+                <h3 class="q-title">How does churn rate change as last login days increase, and is there a point where churn rises sharply?</h3>
+                <p class="grey-text q-sub">Churn rate by days since last login.</p>
+                <div class="facts"><div class="fact"><p class="fact-number">13.43%</p><p class="grey-text">0–7 days</p><p class="grey-text">83 of 618 left</p></div><div class="fact"><p class="fact-number">26.89%</p><p class="grey-text">8–14 days</p><p class="grey-text">142 of 528 left</p></div><div class="fact"><p class="fact-number">34.38%</p><p class="grey-text">15–30 days</p><p class="grey-text">516 of 1,501 left</p></div><div class="fact red-box"><p class="fact-number">75.17%</p><p class="grey-text">31–45 days</p><p class="grey-text">890 of 1,184 left</p></div><div class="fact red-box"><p class="fact-number">75.62%</p><p class="grey-text">46–60 days</p><p class="grey-text">884 of 1,169 left</p></div></div><p class="note"><b class='red'>The danger zone: beyond 30 days.</b> 2,353 customers are inactive for more than 30 days, and 1,774 of them have already left (75.39%).</p>
+                <div class="insight"><i class="fa-solid fa-lightbulb"></i><span><span class="insight-label">INSIGHT</span>Churn rises steadily with inactivity, from 13.43% for customers seen in the last week to 34.38% at 15–30 days. It then more than doubles to 75.17% once a customer passes 30 days without logging in and stays at about 75% beyond that point. <b class='red'>30 days of inactivity is the danger zone.</b></span></div>
+            </div>
+
+            <!-- QUESTION 07 -->
+            <div class="box q-block">
+                <p class="question">QUESTION 07 · ENGAGEMENT AND CHURN</p>
+                <h3 class="q-title">Do churned customers have significantly lower daily watch time than retained customers?</h3>
+                <p class="grey-text q-sub">Independent two-sample t-test on daily watch time.</p>
+                <div class="facts"><div class="fact"><p class="fact-number">23.83</p><p class="grey-text">t-statistic</p></div><div class="fact"><p class="fact-number">5.12e-119</p><p class="grey-text">p-value</p></div><div class="fact"><p class="fact-number">4,998</p><p class="grey-text">degrees of freedom</p></div></div><p class="note"><b class='green'>Decision:</b> p &lt; 0.05, so H0 (mean daily watch time is the same for both groups) is rejected. The difference is statistically significant.</p>
+                <div class="insight"><i class="fa-solid fa-lightbulb"></i><span><span class="insight-label">INSIGHT</span>Daily engagement clearly separates the two groups. With a p-value far below 0.05, the difference is not due to chance, and the positive t-statistic (23.83) shows that retained customers watch more per day than customers who left. Low daily viewing is a reliable churn signal.</span></div>
+            </div>
+
+            <!-- QUESTION 08 -->
+            <div class="box q-block">
+                <p class="question">QUESTION 08 · COMPARING WARNING SIGNALS</p>
+                <h3 class="q-title">How does churn compare among low-viewing customers, long-inactive customers, and customers showing both signals?</h3>
+                
+                <div class="facts"><div class="fact"><p class="fact-number">75.39%</p><p class="grey-text">Long-inactive (more than 30 days)</p><p class="grey-text">1,774 long-inactive customers churned</p></div><div class="fact"><p class="fact-number">85.58%</p><p class="grey-text">Low viewing</p><p class="grey-text">1,068 low-viewing customers churned</p></div><div class="fact red-box"><p class="fact-number">100%</p><p class="grey-text">Both signals</p><p class="grey-text">583 customers with both signals: all churned</p></div></div>
+                <div class="insight"><i class="fa-solid fa-lightbulb"></i><span><span class="insight-label">INSIGHT</span>Each signal is strong on its own: 75.39% of long-inactive customers and 85.58% of low-viewing customers churned, making low viewing the stronger single signal. When both signals appear together, churn reaches 100%: every one of the 583 customers in this group left.</span></div>
+            </div>
+
+            <!-- QUESTION 09 -->
+            <div class="box q-block">
+                <p class="question">QUESTION 09 · PLAN TYPE</p>
+                <h3 class="q-title">Is the Basic plan inherently higher risk, or does it simply contain less-engaged customers?</h3>
+                <p class="grey-text q-sub">Churn compared across plans within the same (low) viewing level.</p>
+                <div class="facts"><div class="fact red-box"><p class="fact-number">97.58%</p><p class="grey-text">Basic · churn rate (low viewers)</p><p class="grey-text">Left 404 · Stayed 10 · Total 414</p></div><div class="fact"><p class="fact-number">79.67%</p><p class="grey-text">Standard · churn rate (low viewers)</p><p class="grey-text">Left 337 · Stayed 86</p></div><div class="fact"><p class="fact-number">79.56%</p><p class="grey-text">Premium · churn rate (low viewers)</p><p class="grey-text">Left 327 · Stayed 84</p></div></div>
+                <div class="insight"><i class="fa-solid fa-lightbulb"></i><span><span class="insight-label">INSIGHT</span>Even when engagement is held equal, Basic remains the riskiest plan: 97.58% of low-viewing Basic customers left (404 of 414), compared with 79.67% for Standard and 79.56% for Premium. Basic’s higher churn is therefore not explained by low viewing alone.</span></div>
+            </div>
+
+            <!-- QUESTION 10 -->
+            <div class="box q-block">
+                <p class="question">QUESTION 10 · PAYMENT METHOD</p>
+                <h3 class="q-title">Within similar viewing levels, do manual payers churn more than automatic payers?</h3>
+                <p class="grey-text q-sub">Manual (Gift Card, Crypto) vs automatic payers, compared at low, medium and high viewing.</p>
+                <div class="table-area"><table><tr><th>VIEWING LEVEL</th><th>MANUAL LEFT</th><th>MANUAL STAYED</th><th>MANUAL CHURN</th><th>AUTOMATIC LEFT</th><th>AUTOMATIC STAYED</th><th>AUTOMATIC CHURN</th></tr><tr><td class="white">Low</td><td>445</td><td>24</td><td class="red">94.88%</td><td>623</td><td>156</td><td class="white">79.97%</td></tr><tr><td class="white">Medium</td><td>575</td><td>376</td><td class="red">60.46%</td><td>687</td><td>864</td><td class="white">44.29%</td></tr><tr><td class="white">High</td><td>96</td><td>389</td><td class="red">19.79%</td><td>89</td><td>676</td><td class="white">11.63%</td></tr></table></div>
+                <div class="insight"><i class="fa-solid fa-lightbulb"></i><span><span class="insight-label">INSIGHT</span>Manual payers churn more at every viewing level: 94.88% vs 79.97% among low viewers, 60.46% vs 44.29% among medium viewers and 19.79% vs 11.63% among high viewers. Because the gap holds even for engaged customers, the renewal method itself adds risk, consistent with the idea that customers leave when a prepaid period runs out.</span></div>
+            </div>
+
+            <!-- QUESTION 11 -->
+            <div class="box q-block">
+                <p class="question">QUESTION 11 · ACCOUNT SHARING</p>
+                <h3 class="q-title">How does churn vary with the number of profiles, and at what point do additional profiles stop improving retention?</h3>
+                
+                <div class="table-area"><table><tr><th>PROFILES</th><th>LEFT</th><th>STAYED</th><th>TOTAL</th><th>CHURN RATE</th><th>RETENTION</th></tr><tr><td>1</td><td>570</td><td>402</td><td>972</td><td>58.64%</td><td>41.36%</td></tr><tr><td>2</td><td>575</td><td>426</td><td>1,001</td><td>57.44%</td><td>42.56%</td></tr><tr><td>3</td><td>575</td><td>419</td><td>994</td><td>57.85%</td><td>42.15%</td></tr><tr class="highlight"><td>4 <span class="tag-green" style="margin-left: 8px;">Lowest churn</span></td><td>375</td><td>624</td><td>999</td><td>37.54%</td><td>62.46%</td></tr><tr><td>5</td><td>420</td><td>614</td><td>1,034</td><td>40.62%</td><td>59.38%</td></tr></table></div>
+                <div class="insight"><i class="fa-solid fa-lightbulb"></i><span><span class="insight-label">INSIGHT</span>Churn stays between 57% and 59% for accounts with one to three profiles, then falls sharply to 37.54% at four profiles, where retention reaches 62.46%. A fifth profile does not improve retention further (40.62% churn), so the benefit of sharing peaks at four profiles.</span></div>
+            </div>
+
+            <!-- QUESTION 12 -->
+            <div class="box q-block">
+                <p class="question">QUESTION 12 · NON-INFLUENTIAL FACTORS</p>
+                <h3 class="q-title">Are gender, region and device associated with churn?</h3>
+                <p class="grey-text q-sub">Chi-square tests of independence between each factor and churn status (threshold: p = 0.05).</p>
+                <div class="table-area"><table><tr><th>FACTOR</th><th>P-VALUE</th><th>DECISION</th><th>RESULT</th></tr><tr><td class="white">Gender</td><td>0.7225</td><td>p &gt; 0.05</td><td><span class="tag-grey">Not associated with churn</span></td></tr><tr><td class="white">Region</td><td>0.5517</td><td>p &gt; 0.05</td><td><span class="tag-grey">Not associated with churn</span></td></tr><tr><td class="white">Device</td><td>0.8642</td><td>p &gt; 0.05</td><td><span class="tag-grey">Not associated with churn</span></td></tr></table></div><p class="note">Churn rate by gender: Female 51.08% &nbsp;|&nbsp; Male 50.00% &nbsp;|&nbsp; Other 49.79%</p>
+                <div class="insight"><i class="fa-solid fa-lightbulb"></i><span><span class="insight-label">INSIGHT</span>Churn is almost identical across genders, and left and stayed counts are closely balanced in every region and on every device. With all p-values well above 0.05, none of these factors has a significant association with churn. This shows churn is driven by behaviour, not by who customers are or how they watch.</span></div>
+            </div>
+
+            <!-- QUESTION 13 -->
+            <div class="box q-block">
+                <p class="question">QUESTION 13 · ATYPICAL CUSTOMERS</p>
+                <h3 class="q-title">What characteristics distinguish heavy viewers who churned and light viewers who stayed?</h3>
+                <p class="grey-text q-sub">Customers whose outcome runs against the main engagement pattern.</p>
+                <div class="facts"><div class="fact red-box"><p class="fact-number">185</p><p class="grey-text">Heavy viewers who left</p></div><div class="fact green-box"><p class="fact-number">180</p><p class="grey-text">Light viewers who stayed</p></div><div class="fact"><p class="fact-number">2,330 / 2,305</p><p class="grey-text">Typical customers (left / stayed)</p></div></div>
+                <div class="insight"><i class="fa-solid fa-lightbulb"></i><span><span class="insight-label">INSIGHT</span>Two groups break the main pattern: 185 heavy viewers left despite high engagement, and 180 light viewers stayed despite low engagement. Engagement alone cannot explain every outcome; their other characteristics are a natural next step to explore.</span></div>
+            </div>
+
+            <!-- QUESTION 14 -->
+            <div class="box q-block">
+                <p class="question">QUESTION 14 · REVENUE LOSS</p>
+                <h3 class="q-title">Which plan accounts for the greatest revenue lost to churn, and is it the same plan with the highest churn rate?</h3>
+                
+                <div class="table-area"><table><tr><th>PLAN</th><th>LEFT</th><th>STAYED</th><th>TOTAL</th><th>CHURN RATE</th><th>REVENUE LOST</th></tr><tr><td class="white">Basic</td><td>1,026</td><td>634</td><td>1,660</td><td class="red">61.81%</td><td>$9,223.74</td></tr><tr><td class="white">Standard</td><td>746</td><td>897</td><td>1,643</td><td>45.40%</td><td>$10,436.54</td></tr><tr><td class="white">Premium</td><td>743</td><td>954</td><td>1,697</td><td>43.78%</td><td class="red">$13,366.57</td></tr></table></div><div class="facts"><div class="fact red-box"><p class="fact-number">$13,366.57</p><p class="grey-text">Highest revenue lost: Premium</p><p class="grey-text">at the lowest churn rate (43.78%)</p></div><div class="fact red-box"><p class="fact-number">61.81%</p><p class="grey-text">Highest churn rate: Basic</p><p class="grey-text">but the lowest revenue lost ($9,223.74)</p></div></div>
+                <div class="insight"><i class="fa-solid fa-lightbulb"></i><span><span class="insight-label">INSIGHT</span>No, the two are different plans. Premium loses the most revenue ($13,366.57 a month) despite having the lowest churn rate (43.78%), because each Premium cancellation costs the most. Basic has the highest churn rate (61.81%) but the lowest revenue loss ($9,223.74). Retention should weigh revenue as well as churn rate.</span></div>
+            </div>
+
+            <!-- QUESTION 15 -->
+            <div class="box q-block">
+                <p class="question">QUESTION 15 · RETENTION PRIORITY</p>
+                <h3 class="q-title">Which single customer group should be prioritised for retention?</h3>
+                <p class="grey-text q-sub">Vulnerable groups ranked by size, churn rate, revenue still retained and revenue already lost.</p>
+                <div class="table-area"><table><tr><th>CUSTOMER GROUP</th><th>GROUP SIZE</th><th>CHURN RATE</th><th>REVENUE RETAINED</th><th>REVENUE LOST</th><th></th></tr><tr><td>Low viewing</td><td>1,248</td><td>85.58%</td><td>$2,804.20</td><td>$14,229.32</td><td></td></tr><tr class="danger-row"><td>Inactive more than 30 days</td><td>2,353</td><td>75.39%</td><td>$8,591.21</td><td class="red">$23,515.26</td><td><span class="tag-red"><i class="fa-solid fa-flag"></i> Priority</span></td></tr><tr><td>Manual payment</td><td>1,905</td><td>58.58%</td><td>$11,181.11</td><td>$15,223.84</td><td></td></tr><tr><td>Basic subscribers</td><td>1,660</td><td>61.81%</td><td>$5,699.66</td><td>$9,223.74</td><td></td></tr></table></div>
+                <div class="insight"><i class="fa-solid fa-lightbulb"></i><span><span class="insight-label">INSIGHT</span>Ranking groups by churn rate alone would point to low viewers, but customers inactive for more than 30 days are the retention priority. They form the largest group (2,353), carry the highest monthly revenue lost ($23,515.26), and still hold $8,591.21 of active monthly revenue that can be protected.</span></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
