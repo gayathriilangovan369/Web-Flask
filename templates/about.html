@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About · Unsolved Metrics</title>
 
     <link rel="stylesheet"
@@ -339,7 +340,7 @@
                 Dashboard
             </a>
 
-            <a class="menu-item" href="#">
+            <a class="menu-item" href="{{ url_for('predict') }}">
                 <i class="fa-solid fa-brain"></i>
                 Make Prediction
             </a>
@@ -374,9 +375,10 @@
                 <h1>About <span class="blue-word">Unsolved Metrics</span></h1>
                 <p class="tagline">Where intelligence meets the unknown.</p>
                 <p class="banner-text">
-                    Unsolved Metrics is a customer churn intelligence project built on a Netflix customer churn dataset.
-                    It combines exploratory data analysis and machine learning to show who is leaving,
-                    what warns us early, and how much revenue is at risk.
+                    This is a customer churn prediction project built on a Netflix customer dataset.
+                    It uses exploratory data analysis to uncover patterns in customer behaviour, and an XGBoost
+                    machine learning model to predict which subscribers are likely to cancel. The app shows who is leaving,
+                    the early warning signs to watch for, and how much revenue is at risk.
                 </p>
             </div>
 
@@ -502,7 +504,7 @@
                             <td>A summary of churn, the key finding and the top models.</td>
                         </tr>
                         <tr>
-                            <td><a class="page-link" href="#"><i class="fa-solid fa-brain"></i> Make Prediction</a></td>
+                            <td><a class="page-link" href="{{ url_for('predict') }}"><i class="fa-solid fa-brain"></i> Make Prediction</a></td>
                             <td>Score one subscriber and see their churn risk.</td>
                         </tr>
                         <tr>
