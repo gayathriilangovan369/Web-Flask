@@ -43,7 +43,7 @@ def dataset():
 @app.route("/download")
 def download_csv():
     # sends the whole CSV file to the visitor's computer
-    return send_file("data/Netflix.csv", as_attachment=True, download_name="Netflix_customer_churn.csv")
+    return send_file("Data/Netflix.csv", as_attachment=True, download_name="Netflix_customer_churn.csv")
 
 
 @app.route("/predict", methods=["GET", "POST"])
