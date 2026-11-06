@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Model Selection · Unsolved Metrics</title>
 
     <link rel="stylesheet"
@@ -610,37 +611,37 @@
                     <div class="step">
                         <div class="step-circle"><i class="fa-solid fa-broom"></i></div>
                         <p class="step-name">Clean</p>
-                        <p class="grey-text">Handled 2,100 missing values and removed empty rows, leaving 5,000 complete records</p>
+                        <p class="grey-text">Resolved 2,100 missing values and removed blank rows, giving 5,000 complete customer records</p>
                     </div>
                     <div class="step">
                         <div class="step-circle"><i class="fa-solid fa-table-cells"></i></div>
                         <p class="step-name">Encode</p>
-                        <p class="grey-text">One-hot encoding of plan, payment method and genre</p>
-                    </div>
-                    <div class="step">
-                        <div class="step-circle"><i class="fa-solid fa-filter"></i></div>
-                        <p class="step-name">Select</p>
-                        <p class="grey-text">SelectKBest (chi²) kept the 7 strongest of 18 features</p>
+                        <p class="grey-text">Converted subscription type, payment method and favourite genre into numerical form using one-hot encoding</p>
                     </div>
                     <div class="step">
                         <div class="step-circle"><i class="fa-solid fa-scissors"></i></div>
                         <p class="step-name">Split</p>
-                        <p class="grey-text">3,500 customers to train, 1,500 to test</p>
+                        <p class="grey-text">Divided the data 70 / 30: 3,500 records for training and 1,500 for testing</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-circle"><i class="fa-solid fa-filter"></i></div>
+                        <p class="step-name">Select</p>
+                        <p class="grey-text">Applied the chi-square test to the training data to keep the 7 most relevant of 18 features</p>
                     </div>
                     <div class="step">
                         <div class="step-circle"><i class="fa-solid fa-sliders"></i></div>
                         <p class="step-name">Scale</p>
-                        <p class="grey-text">StandardScaler fitted on the training data</p>
+                        <p class="grey-text">Standardised all features with StandardScaler, fitted on the training data</p>
                     </div>
                     <div class="step">
                         <div class="step-circle"><i class="fa-solid fa-flask-vial"></i></div>
                         <p class="step-name">Compare</p>
-                        <p class="grey-text">10 classifiers trained and ranked by accuracy</p>
+                        <p class="grey-text">Trained 10 classification algorithms and ranked them by test accuracy</p>
                     </div>
                     <div class="step last">
                         <div class="step-circle"><i class="fa-solid fa-floppy-disk"></i></div>
                         <p class="step-name">Save</p>
-                        <p class="grey-text">XGBoost model and scaler saved as .pkl files</p>
+                        <p class="grey-text">Saved XGBoost, the most accurate model, together with its scaler for use in this app</p>
                     </div>
                 </div>
             </div>
@@ -650,7 +651,7 @@
             <div class="box" style="margin-bottom: 20px;">
                 <p class="small-title">FEATURE SELECTION · SELECTKBEST, CHI²</p>
                 <h2 class="section-title">7 of 18 features kept</h2>
-                <p class="grey-text" style="margin: 0;">The chi-square test scored how strongly each feature relates to churn. The 7 strongest were kept for the model.</p>
+                <p class="grey-text" style="margin: 0;">The chi-square test scored how strongly each feature relates to churn, using the training data only. The 7 strongest were kept for the model.</p>
 
                 <div class="row" style="margin-bottom: 0;">
                     <div class="table-area kept-box" style="width: 50%; margin-right: 20px;">
