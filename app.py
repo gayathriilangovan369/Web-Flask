@@ -14,7 +14,7 @@ scaler = pickle.load(open("Models/scaler.pkl", "rb"))
 PLAN_FEES = {"Basic": 8.99, "Standard": 13.99, "Premium": 17.99}
 
 # monthly watch hours of every customer, used to rank a subscriber against the dataset
-ALL_WATCH_HOURS = pd.read_csv("data/Netflix.csv")["watch_hours"].dropna()
+ALL_WATCH_HOURS = pd.read_csv("Data/Netflix.csv")["watch_hours"].dropna()
 
 
 @app.route("/")
@@ -24,7 +24,7 @@ def home():
 
 @app.route("/dataset")
 def dataset():
-    df = pd.read_csv("data/Netflix.csv")
+    df = pd.read_csv("Data/Netflix.csv")
 
     # first 20 rows, numbers rounded, empty cells shown as "-"
     sample = df.head(20).round(2).fillna("-")
