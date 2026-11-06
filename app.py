@@ -5,10 +5,10 @@ import pickle
 app = Flask(__name__)
 
 # Load model
-model = pickle.load(open("models/xgboost_model.pkl", "rb"))
+model = pickle.load(open("Models/xgboost_model.pkl", "rb"))
 
 # Load scaler
-scaler = pickle.load(open("models/scaler.pkl", "rb"))
+scaler = pickle.load(open("Models/scaler.pkl", "rb"))
 
 # each plan always has the same monthly fee in the dataset
 PLAN_FEES = {"Basic": 8.99, "Standard": 13.99, "Premium": 17.99}
