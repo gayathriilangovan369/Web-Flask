@@ -603,9 +603,9 @@
 
                             <div class="field">
                                 <label for="avg_watch_time_per_day">Average watch time per day</label>
-                                <input type="number" id="avg_watch_time_per_day" name="avg_watch_time_per_day" min="0" max="1440" step="any"
-                                       placeholder="e.g. 30" value="{{ request.form.get('avg_watch_time_per_day', '') }}" required>
-                                <p class="hint">In minutes</p>
+                                <input type="number" id="avg_watch_time_per_day" name="avg_watch_time_per_day" min="0" max="24" step="any"
+                                       placeholder="e.g. 0.5" value="{{ request.form.get('avg_watch_time_per_day', '') }}" required>
+                                <p class="hint">In hours (0.5 = 30 minutes)</p>
                             </div>
 
                             <div class="field">
@@ -648,7 +648,7 @@
                         <div class="details">
                             <div class="detail-row"><span>Alert tier</span><span>{{ tier }}</span></div>
                             <div class="detail-row"><span>Churn probability</span><span class="text-{{ colour }}">{{ probability }}%</span></div>
-                            <div class="detail-row"><span>Response urgency</span><span>{% if red %}Immediate action required (&lt; 12 hours){% else %}Standard marketing lifecycle loop{% endif %}</span></div>
+                            <div class="detail-row"><span>Response urgency</span><span>{% if red %}Immediate action required{% else %}Standard marketing lifecycle loop{% endif %}</span></div>
                         </div>
 
                         <p class="footnote">Churn probability of 50% or more is at risk; under 50% is stable.</p>
@@ -750,7 +750,7 @@
                         <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Frictionless revenue</p><p class="item-text">Linked to automatic renewal via {{ payment_method if payment_method == 'PayPal' else payment_method | lower }}.</p></div></div>
                         {% endif %}
                         {% if last_login_days <= 7 %}
-                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Recently active</p><p class="item-text">Last login {{ '%g' % last_login_days }} days ago.</p></div></div>
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Recently active</p><p class="item-text">{% if last_login_days == 0 %}Logged in today.{% elif last_login_days == 1 %}Last login 1 day ago.{% else %}Last login {{ '%g' % last_login_days }} days ago.{% endif %}</p></div></div>
                         {% endif %}
                         {% if not any_growth %}
                         <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Low churn probability</p><p class="item-text">The model expects this subscriber to stay.</p></div></div>
