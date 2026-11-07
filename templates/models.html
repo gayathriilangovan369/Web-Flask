@@ -521,7 +521,7 @@
                     <h1>Model <span style="color: #6FD3FF;">Selection</span></h1>
                     <p class="grey-text">
                         Ten classification algorithms were trained on the same 7 selected features and tested on
-                        the same 1,500 customers. The most accurate one powers the churn predictions in this app.
+                        the same 1,500 customers. XGBoost achieved the highest test accuracy and was selected as the final model.
                     </p>
                 </div>
                 <div class="winner-card">
@@ -561,7 +561,7 @@
                     <div class="podium-medal" style="background-color: #F5B544;">1</div>
                     <p class="podium-name">XGBoost</p>
                     <p class="podium-score" style="color: #F5B544;">96.4%</p>
-                    <p class="grey-text">Boosting · selected for the app</p>
+                    <p class="grey-text">Boosting · final model</p>
                 </div>
                 <div class="podium silver">
                     <div class="podium-medal" style="background-color: #C8D3E2;">2</div>
@@ -606,13 +606,13 @@
             <div class="box" style="margin-bottom: 20px;">
                 <p class="small-title">HOW THE MODEL WAS BUILT</p>
                 <h2 class="section-title">From raw data to one saved model</h2>
-                <p class="grey-text" style="margin: 0;">Every algorithm went through exactly the same steps.</p>
+                <p class="grey-text" style="margin: 0;">Every algorithm was prepared and evaluated in exactly the same way.</p>
 
                 <div class="steps">
                     <div class="step">
                         <div class="step-circle"><i class="fa-solid fa-broom"></i></div>
                         <p class="step-name">Clean</p>
-                        <p class="grey-text">Resolved 2,100 missing values and removed blank rows, giving 5,000 complete customer records</p>
+                        <p class="grey-text">Treated 2,100 missing values across 10 columns, giving 5,000 complete customer records</p>
                     </div>
                     <div class="step">
                         <div class="step-circle"><i class="fa-solid fa-table-cells"></i></div>
@@ -642,7 +642,7 @@
                     <div class="step last">
                         <div class="step-circle"><i class="fa-solid fa-floppy-disk"></i></div>
                         <p class="step-name">Save</p>
-                        <p class="grey-text">Saved XGBoost, the most accurate model, together with its scaler for use in this app</p>
+                        <p class="grey-text">Saved the final XGBoost model and scaler for generating predictions</p>
                     </div>
                 </div>
             </div>
@@ -692,7 +692,7 @@
                     <div class="table-area">
                         <table>
                             <tr><th></th><th>PREDICTED: STAY</th><th>PREDICTED: CHURN</th></tr>
-                            <tr><td>Actually stayed</td><td class="good-cell">743<span>correctly kept</span></td><td class="bad-cell">19<span>false alarms</span></td></tr>
+                            <tr><td>Actually stayed</td><td class="good-cell">743<span>correctly predicted to stay</span></td><td class="bad-cell">19<span>false alarms</span></td></tr>
                             <tr><td>Actually churned</td><td class="bad-cell">35<span>missed churners</span></td><td class="good-cell">703<span>churners caught</span></td></tr>
                         </table>
                     </div>
