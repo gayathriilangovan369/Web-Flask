@@ -601,11 +601,11 @@
                                 <p class="hint">Profiles on the account</p>
                             </div>
 
-                            <div class="field">
+                                                        <div class="field">
                                 <label for="avg_watch_time_per_day">Average watch time per day</label>
-                                <input type="number" id="avg_watch_time_per_day" name="avg_watch_time_per_day" min="0" max="24" step="any"
-                                       placeholder="e.g. 0.5" value="{{ request.form.get('avg_watch_time_per_day', '') }}" required>
-                                <p class="hint">In hours (0.5 = 30 minutes)</p>
+                                <input type="number" id="avg_watch_time_per_day" name="avg_watch_time_per_day" min="0" max="1440" step="any"
+                                       placeholder="e.g. 45" value="{{ request.form.get('avg_watch_time_per_day', '') }}" required>
+                                <p class="hint">In minutes</p>
                             </div>
 
                             <div class="field">
