@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Selection · Unsolved Metrics</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Michroma&display=swap">
+
+    <style>
+        body {
+            background-color: #0B1423;
+            font-family: 'Outfit', Arial, sans-serif;
+            margin: 0;
+        }
+
+        .page-layout {
+            display: flex;
+        }
+
+        .sidebar {
+            background-color: #0B1423;
+            width: 290px;
+            height: 100vh;
+            border-right: 1px solid #34465D;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .company-logo {
+            width: 300px;
+            height: auto;
+            display: block;
+            margin: 12px auto 20px;
+        }
+
+        .menu-item {
+            display: block;
+            text-decoration: none;
+            color: #D5DCE5;
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            margin-top: 0;
+            margin-bottom: 5px;
+            margin-left: 10px;
+            margin-right: 10px;
+            padding: 16px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .menu-item:hover {
+            background-color: #263B54;
+            color: white;
+        }
+
+        .menu-item i {
+            display: inline-block;
+            width: 28px;
+            text-align: center;
+            margin-right: 10px;
+            color: #92A3BA;
+        }
+
+        .menu-item:hover i {
+            color: white;
+        }
+
+        .main-content {
+            background-color: #0B1423;
+            width: 100%;
+            padding: 30px;
+            min-width: 0;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Michroma', Arial, sans-serif;
+            font-weight: 400;
+            color: white;
+        }
+
+        /* ---------- shared pieces (same as the Home page) ---------- */
+
+        .box {
+            background-color: #0F1B2E;
+            border: 1px solid #22344D;
+            border-radius: 14px;
+            padding: 24px;
+        }
+
+        .row {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .small-title {
+            color: #6FD3FF;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            margin: 0;
+        }
+
+        .grey-text {
+            color: #92A3BA;
+        }
+
+        .tile {
+            width: 25%;
+            margin-right: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tile-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            background-color: #13284A;
+            color: #6FD3FF;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 14px;
+            flex-shrink: 0;
+        }
+
+        .tile-number {
+            color: white;
+            font-size: 26px;
+            font-weight: 600;
+            margin: 2px 0;
+        }
+
+        .tile p {
+            margin: 0;
+        }
+
+        /* ---------- banner ---------- */
+
+        .banner {
+            background: linear-gradient(120deg, #163A73 0%, #0F1B2E 70%);
+            border: 1px solid #22344D;
+            border-radius: 16px;
+            padding: 36px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .banner h1 {
+            font-size: 30px;
+            margin: 12px 0 10px 0;
+        }
+
+        .banner p {
+            margin: 0;
+            max-width: 720px;
+            line-height: 1.6;
+        }
+
+        .winner-card {
+            background-color: #0B1423;
+            border: 1px solid #8A6A2A;
+            border-radius: 16px;
+            padding: 24px 34px;
+            text-align: center;
+            margin-left: 30px;
+            flex-shrink: 0;
+        }
+
+        .trophy {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(160deg, #FFE08A, #F5B544);
+            color: #0B1423;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px auto;
+        }
+
+        .winner-name {
+            color: white;
+            font-family: 'Michroma', Arial, sans-serif;
+            font-size: 20px;
+            margin: 6px 0 0 0;
+        }
+
+        .winner-score {
+            color: #F5B544;
+            font-size: 52px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* ---------- stat tiles ---------- */
+
+        .stat {
+            width: 25%;
+            margin-right: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background-color: #13284A;
+            color: #6FD3FF;
+            font-size: 19px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 14px;
+            flex-shrink: 0;
+        }
+
+        .stat p {
+            margin: 0;
+        }
+
+        .stat-number {
+            color: white;
+            font-size: 26px;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: 18px;
+            margin: 6px 0 4px 0;
+        }
+
+        /* ---------- podium (top 3) ---------- */
+
+        .podium {
+            width: 33%;
+            margin-right: 16px;
+            text-align: center;
+            border-radius: 14px;
+            padding: 22px;
+        }
+
+        .podium p {
+            margin: 4px 0;
+        }
+
+        .gold {
+            background: linear-gradient(180deg, #2B2414, #0F1B2E);
+            border: 1px solid #F5B544;
+        }
+
+        .silver {
+            background: linear-gradient(180deg, #1C2636, #0F1B2E);
+            border: 1px solid #8796AB;
+        }
+
+        .bronze {
+            background: linear-gradient(180deg, #2A1E16, #0F1B2E);
+            border: 1px solid #C98A55;
+            margin-right: 0;
+        }
+
+        .podium-medal {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            color: #0B1423;
+            font-weight: 700;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px auto;
+        }
+
+        .podium-name {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .podium-score {
+            font-size: 34px;
+            font-weight: 600;
+        }
+
+        /* ---------- tables ---------- */
+
+        .table-area {
+            border: 1px solid #22344D;
+            border-radius: 12px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+
+        th {
+            background-color: #13223A;
+            color: #92A3BA;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            text-align: left;
+            padding: 13px 18px;
+        }
+
+        td {
+            color: #D5DCE5;
+            padding: 13px 18px;
+            border-top: 1px solid #22344D;
+        }
+
+        tr:hover td {
+            background-color: #13223A;
+        }
+
+        .first-place td {
+            background-color: #22201A;
+            color: white;
+            font-weight: 600;
+        }
+
+        .rank {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #1A2B44;
+            color: #92A3BA;
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .family {
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .ensemble { color: #6FD3FF; background-color: #13284A; border: 1px solid #2A4A78; }
+        .tree { color: #34D399; background-color: #11302A; border: 1px solid #1F6B54; }
+        .other { color: #F5B544; background-color: #2E2615; border: 1px solid #6B5320; }
+        .linear { color: #92A3BA; background-color: #13223A; border: 1px solid #34465D; }
+
+        .score {
+            color: white;
+            font-weight: 600;
+        }
+
+        /* ---------- journey steps ---------- */
+
+        .steps {
+            display: flex;
+            margin-top: 22px;
+        }
+
+        .step {
+            width: 14%;
+            text-align: center;
+            padding: 0 6px;
+        }
+
+        .step-circle {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background-color: #13223A;
+            border: 2px solid #2F7BFF;
+            color: #6FD3FF;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px auto;
+        }
+
+        .last .step-circle {
+            background-color: #2F7BFF;
+            color: white;
+        }
+
+        .step-name {
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 0 0 6px 0;
+        }
+
+        .step p {
+            font-size: 13px;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* ---------- features ---------- */
+
+        .feature-name {
+            font-family: Consolas, monospace;
+            font-size: 14px;
+        }
+
+        .kept-box {
+            border: 1px solid #1F6B54;
+        }
+
+        .kept-box th {
+            background-color: #11302A;
+            color: #34D399;
+        }
+
+        .dropped-box th {
+            color: #92A3BA;
+        }
+
+        .dropped-box td {
+            color: #6E8099;
+        }
+
+        /* ---------- confusion matrix ---------- */
+
+        .good-cell {
+            background-color: #11302A;
+            color: #34D399;
+            font-size: 30px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .bad-cell {
+            background-color: #2A1820;
+            color: #F87171;
+            font-size: 30px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .good-cell span, .bad-cell span {
+            display: block;
+            font-size: 12px;
+            font-weight: 400;
+            color: #D5DCE5;
+        }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css') }}">
+</head>
+
+<body>
+
+    <div class="page-layout">
+
+        <div class="sidebar">
+
+            <a href="{{ url_for('home') }}">
+    <img class="company-logo"
+         src="{{ url_for('static', filename='images/Unsolved_Metrics_Website_Logo.png') }}"
+         alt="Unsolved Metrics Logo">
+</a>
+
+            <a class="menu-item" href="{{ url_for('home') }}">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+            </a>
+
+            <a class="menu-item" href="{{ url_for('predict') }}">
+                <i class="fa-solid fa-brain"></i>
+                Make Prediction
+            </a>
+
+            <a class="menu-item" href="{{ url_for('dataset') }}">
+                <i class="fa-solid fa-database"></i>
+                View Dataset
+            </a>
+
+            <a class="menu-item" href="{{ url_for('insights') }}">
+                <i class="fa-solid fa-chart-pie"></i>
+                Customer Intelligence
+            </a>
+
+            <a class="menu-item" href="{{ url_for('models') }}" style="background-color: #263B54; color: white;">
+                <i class="fa-solid fa-trophy"></i>
+                Model Selection
+            </a>
+
+            <a class="menu-item" href="{{ url_for('about') }}">
+                <i class="fa-solid fa-circle-info"></i>
+                About
+            </a>
+
+        </div>
+
+        <div class="main-content">
+
+            <!-- 1. BANNER -->
+            <div class="banner">
+                <div>
+                    <p class="small-title">HOW THE MODEL WAS CHOSEN</p>
+                    <h1>Model <span style="color: #6FD3FF;">Selection</span></h1>
+                    <p class="grey-text">
+                        Ten classification algorithms were trained on the same 7 selected features and tested on
+                        the same 1,500 customers. The most accurate one powers the churn predictions in this app.
+                    </p>
+                </div>
+                <div class="winner-card">
+                    <div class="trophy"><i class="fa-solid fa-trophy"></i></div>
+                    <p class="small-title">WINNING MODEL</p>
+                    <p class="winner-name">XGBoost</p>
+                    <p class="winner-score">96.4%</p>
+                    <p class="grey-text" style="margin: 0;">test accuracy</p>
+                </div>
+            </div>
+
+
+            <!-- 2. FOUR STAT TILES -->
+            <div class="row">
+                <div class="box stat">
+                    <div class="stat-icon"><i class="fa-solid fa-flask-vial"></i></div>
+                    <div><p class="grey-text">Algorithms compared</p><p class="stat-number">10</p></div>
+                </div>
+                <div class="box stat">
+                    <div class="stat-icon" style="color: #34D399;"><i class="fa-solid fa-filter"></i></div>
+                    <div><p class="grey-text">Features selected</p><p class="stat-number">7 of 18</p></div>
+                </div>
+                <div class="box stat">
+                    <div class="stat-icon" style="color: #F5B544;"><i class="fa-solid fa-scissors"></i></div>
+                    <div><p class="grey-text">Train / test split</p><p class="stat-number">3,500 / 1,500</p></div>
+                </div>
+                <div class="box stat" style="margin-right: 0;">
+                    <div class="stat-icon" style="color: #F87171;"><i class="fa-solid fa-bullseye"></i></div>
+                    <div><p class="grey-text">Churners caught</p><p class="stat-number">95.3%</p></div>
+                </div>
+            </div>
+
+
+            <!-- 3. TOP 3 -->
+            <div class="row">
+                <div class="podium gold">
+                    <div class="podium-medal" style="background-color: #F5B544;">1</div>
+                    <p class="podium-name">XGBoost</p>
+                    <p class="podium-score" style="color: #F5B544;">96.4%</p>
+                    <p class="grey-text">Boosting · selected for the app</p>
+                </div>
+                <div class="podium silver">
+                    <div class="podium-medal" style="background-color: #C8D3E2;">2</div>
+                    <p class="podium-name">Random Forest</p>
+                    <p class="podium-score" style="color: #C8D3E2;">95.33%</p>
+                    <p class="grey-text">Bagging</p>
+                </div>
+                <div class="podium bronze">
+                    <div class="podium-medal" style="background-color: #C98A55;">3</div>
+                    <p class="podium-name">Decision Tree</p>
+                    <p class="podium-score" style="color: #C98A55;">93.47%</p>
+                    <p class="grey-text">Tree</p>
+                </div>
+            </div>
+
+
+            <!-- 4. FULL LEADERBOARD TABLE -->
+            <div class="box" style="margin-bottom: 20px;">
+                <p class="small-title">LEADERBOARD</p>
+                <h2 class="section-title">All ten algorithms, ranked</h2>
+                <p class="grey-text" style="margin: 0;">Same features, same 70 / 30 split, same random state, so the comparison is fair.</p>
+
+                <div class="table-area">
+                    <table>
+                        <tr><th>RANK</th><th>ALGORITHM</th><th>TYPE</th><th>TEST ACCURACY</th></tr>
+                        <tr class="first-place"><td><span class="rank" style="background-color: #F5B544; color: #0B1423;">1</span></td><td>XGBoost</td><td><span class="family ensemble">Boosting</span></td><td style="color: #F5B544;">96.4%</td></tr>
+                        <tr><td><span class="rank" style="background-color: #C8D3E2; color: #0B1423;">2</span></td><td>Random Forest</td><td><span class="family ensemble">Bagging</span></td><td class="score">95.33%</td></tr>
+                        <tr><td><span class="rank" style="background-color: #C98A55; color: #0B1423;">3</span></td><td>Decision Tree</td><td><span class="family tree">Tree</span></td><td class="score">93.47%</td></tr>
+                        <tr><td><span class="rank">4</span></td><td>AdaBoost</td><td><span class="family ensemble">Boosting</span></td><td class="score">93.2%</td></tr>
+                        <tr><td><span class="rank">5</span></td><td>CatBoost</td><td><span class="family ensemble">Boosting</span></td><td class="score">91.8%</td></tr>
+                        <tr><td><span class="rank">6</span></td><td>K-Nearest Neighbours</td><td><span class="family other">Distance-based</span></td><td class="score">90.93%</td></tr>
+                        <tr><td><span class="rank">7</span></td><td>SVM (RBF kernel)</td><td><span class="family other">Kernel</span></td><td class="score">89.27%</td></tr>
+                        <tr><td><span class="rank">8</span></td><td>Logistic Regression</td><td><span class="family linear">Linear</span></td><td class="score">88.4%</td></tr>
+                        <tr><td><span class="rank">8</span></td><td>SVM (linear)</td><td><span class="family linear">Linear</span></td><td class="score">88.4%</td></tr>
+                        <tr><td><span class="rank">10</span></td><td>Naive Bayes</td><td><span class="family linear">Probabilistic</span></td><td class="score">82.0%</td></tr>
+                    </table>
+                </div>
+            </div>
+
+
+            <!-- 5. HOW THE MODEL WAS BUILT -->
+            <div class="box" style="margin-bottom: 20px;">
+                <p class="small-title">HOW THE MODEL WAS BUILT</p>
+                <h2 class="section-title">From raw data to one saved model</h2>
+                <p class="grey-text" style="margin: 0;">Every algorithm went through exactly the same steps.</p>
+
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-circle"><i class="fa-solid fa-broom"></i></div>
+                        <p class="step-name">Clean</p>
+                        <p class="grey-text">Resolved 2,100 missing values and removed blank rows, giving 5,000 complete customer records</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-circle"><i class="fa-solid fa-table-cells"></i></div>
+                        <p class="step-name">Encode</p>
+                        <p class="grey-text">Converted subscription type, payment method and favourite genre into numerical form using one-hot encoding</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-circle"><i class="fa-solid fa-scissors"></i></div>
+                        <p class="step-name">Split</p>
+                        <p class="grey-text">Divided the data 70 / 30: 3,500 records for training and 1,500 for testing</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-circle"><i class="fa-solid fa-filter"></i></div>
+                        <p class="step-name">Select</p>
+                        <p class="grey-text">Applied the chi-square test to the training data to keep the 7 most relevant of 18 features</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-circle"><i class="fa-solid fa-sliders"></i></div>
+                        <p class="step-name">Scale</p>
+                       <p class="grey-text">Standardised all features with StandardScaler, fitted on the training data and applied to the test data and live predictions</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-circle"><i class="fa-solid fa-flask-vial"></i></div>
+                        <p class="step-name">Compare</p>
+                        <p class="grey-text">Trained 10 classification algorithms and ranked them by test accuracy</p>
+                    </div>
+                    <div class="step last">
+                        <div class="step-circle"><i class="fa-solid fa-floppy-disk"></i></div>
+                        <p class="step-name">Save</p>
+                        <p class="grey-text">Saved XGBoost, the most accurate model, together with its scaler for use in this app</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- 6. FEATURES: KEPT AND DROPPED -->
+            <div class="box" style="margin-bottom: 20px;">
+                <p class="small-title">FEATURE SELECTION · SELECTKBEST, CHI²</p>
+                <h2 class="section-title">7 of 18 features kept</h2>
+                <p class="grey-text" style="margin: 0;">The chi-square test scored how strongly each feature relates to churn, using the training data only. The 7 strongest were kept for the model.</p>
+
+                <div class="row" style="margin-bottom: 0;">
+                    <div class="table-area kept-box" style="width: 50%; margin-right: 20px;">
+                        <table>
+                            <tr><th><i class="fa-solid fa-circle-check"></i> &nbsp;KEPT (7)</th></tr>
+                            <tr><td class="feature-name">watch_hours</td></tr>
+                            <tr><td class="feature-name">last_login_days</td></tr>
+                            <tr><td class="feature-name">monthly_fee</td></tr>
+                            <tr><td class="feature-name">subscription_type_Premium</td></tr>
+                            <tr><td class="feature-name">number_of_profiles</td></tr>
+                            <tr><td class="feature-name">avg_watch_time_per_day</td></tr>
+                            <tr><td class="feature-name">payment_method_Crypto</td></tr>
+                        </table>
+                    </div>
+                    <div class="table-area dropped-box" style="width: 50%;">
+                        <table>
+                            <tr><th colspan="2"><i class="fa-solid fa-circle-xmark"></i> &nbsp;DROPPED (11)</th></tr>
+                            <tr><td class="feature-name">age</td><td class="feature-name">favorite_genre_Comedy</td></tr>
+                            <tr><td class="feature-name">subscription_type_Standard</td><td class="feature-name">favorite_genre_Documentary</td></tr>
+                            <tr><td class="feature-name">payment_method_Debit Card</td><td class="feature-name">favorite_genre_Drama</td></tr>
+                            <tr><td class="feature-name">payment_method_Gift Card</td><td class="feature-name">favorite_genre_Horror</td></tr>
+                            <tr><td class="feature-name">payment_method_PayPal</td><td class="feature-name">favorite_genre_Romance</td></tr>
+                            <tr><td class="feature-name"></td><td class="feature-name">favorite_genre_Sci-Fi</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- 7. CONFUSION MATRIX + SCORES -->
+            <div class="row">
+                <div class="box" style="width: 50%; margin-right: 20px;">
+                    <p class="small-title">XGBOOST ON THE TEST SET</p>
+                    <h2 class="section-title">Confusion matrix</h2>
+                    <p class="grey-text" style="margin: 0;">1,500 test customers: 762 who stayed and 738 who churned.</p>
+
+                    <div class="table-area">
+                        <table>
+                            <tr><th></th><th>PREDICTED: STAY</th><th>PREDICTED: CHURN</th></tr>
+                            <tr><td>Actually stayed</td><td class="good-cell">743<span>correctly kept</span></td><td class="bad-cell">19<span>false alarms</span></td></tr>
+                            <tr><td>Actually churned</td><td class="bad-cell">35<span>missed churners</span></td><td class="good-cell">703<span>churners caught</span></td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="box" style="width: 50%;">
+                    <p class="small-title">XGBOOST SCORES</p>
+                    <h2 class="section-title">How good are the predictions?</h2>
+                    <p class="grey-text" style="margin: 0;">Calculated from the confusion matrix.</p>
+
+                    <div class="table-area">
+                        <table>
+                            <tr><th>MEASURE</th><th>SCORE</th><th>WHAT IT MEANS</th></tr>
+                            <tr><td>Accuracy</td><td class="score">96.4%</td><td class="grey-text">Predictions that were correct</td></tr>
+                            <tr><td>Precision</td><td class="score">97.4%</td><td class="grey-text">Flagged churners who really left</td></tr>
+                            <tr><td>Recall</td><td class="score">95.3%</td><td class="grey-text">Real churners the model caught</td></tr>
+                            <tr><td>F1 score</td><td class="score">96.3%</td><td class="grey-text">Balance of precision and recall</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

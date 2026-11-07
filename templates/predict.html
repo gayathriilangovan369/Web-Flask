@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Prediction · Unsolved Metrics</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Michroma&display=swap">
+
+    <style>
+        body {
+            background-color: #0B1423;
+            font-family: 'Outfit', Arial, sans-serif;
+            margin: 0;
+        }
+
+        .page-layout {
+            display: flex;
+        }
+
+        .sidebar {
+            background-color: #0B1423;
+            width: 290px;
+            height: 100vh;
+            border-right: 1px solid #34465D;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .company-logo {
+            width: 300px;
+            height: auto;
+            display: block;
+            margin: 12px auto 20px;
+        }
+
+        .menu-item {
+            display: block;
+            text-decoration: none;
+            color: #D5DCE5;
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            margin-top: 0;
+            margin-bottom: 5px;
+            margin-left: 10px;
+            margin-right: 10px;
+            padding: 16px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .menu-item:hover {
+            background-color: #263B54;
+            color: white;
+        }
+
+        .menu-item i {
+            display: inline-block;
+            width: 28px;
+            text-align: center;
+            margin-right: 10px;
+            color: #92A3BA;
+        }
+
+        .menu-item:hover i {
+            color: white;
+        }
+
+        .main-content {
+            background-color: #0B1423;
+            width: 100%;
+            padding: 30px;
+            min-width: 0;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Michroma', Arial, sans-serif;
+            font-weight: 400;
+            color: white;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 20px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #22344D;
+        }
+
+        .page-header h1 {
+            font-size: 24px;
+            margin: 0 0 8px 0;
+        }
+
+        .page-header p {
+            margin: 0;
+        }
+
+        .muted {
+            color: #92A3BA;
+        }
+
+        .model-meta {
+            color: #92A3BA;
+            font-size: 14px;
+            text-align: right;
+        }
+
+        .model-meta b {
+            color: #D5DCE5;
+            font-weight: 600;
+        }
+
+        .layout {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background-color: #0F1B2E;
+            border: 1px solid #22344D;
+            border-radius: 12px;
+        }
+
+        .card-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid #22344D;
+        }
+
+        .card-header h2 {
+            font-family: 'Outfit', Arial, sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .card-header p {
+            color: #92A3BA;
+            font-size: 14px;
+            margin: 4px 0 0 0;
+        }
+
+        .card-body {
+            padding: 22px 24px;
+        }
+
+        .form-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .field {
+            width: 48%;
+            margin-bottom: 18px;
+        }
+
+        .field label {
+            display: block;
+            color: #D5DCE5;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            box-sizing: border-box;
+            height: 42px;
+            background-color: #0B1423;
+            color: white;
+            border: 1px solid #34465D;
+            border-radius: 8px;
+            padding: 0 12px;
+            font-family: 'Outfit', Arial, sans-serif;
+            font-size: 15px;
+        }
+
+        .field input:focus,
+        .field select:focus {
+            outline: none;
+            border-color: #2F7BFF;
+        }
+
+        .hint {
+            color: #7D8FA6;
+            font-size: 12px;
+            margin: 5px 0 0 0;
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            border-top: 1px solid #22344D;
+            padding-top: 18px;
+            margin-top: 2px;
+        }
+
+        .button-primary {
+            background-color: #2F7BFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            height: 42px;
+            padding: 0 22px;
+            font-family: 'Outfit', Arial, sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .button-primary:hover {
+            background-color: #1B5BE0;
+        }
+
+        .button-secondary {
+            color: #B8C4D4;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            margin-right: 20px;
+        }
+
+        .button-secondary:hover {
+            color: white;
+        }
+
+
+        /* ---------- assessment ---------- */
+
+        .score {
+            color: white;
+            font-size: 40px;
+            font-weight: 600;
+            line-height: 1;
+            margin-right: 14px;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .status::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            margin-right: 7px;
+            background-color: currentColor;
+        }
+
+        .details {
+            margin-top: 20px;
+            border-top: 1px solid #22344D;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #1A2A40;
+            font-size: 14px;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-row span:first-child {
+            color: #92A3BA;
+        }
+
+        .detail-row span:last-child {
+            color: white;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .footnote {
+            color: #7D8FA6;
+            font-size: 12px;
+            line-height: 1.5;
+            margin: 14px 0 0 0;
+        }
+
+        .empty {
+            padding: 50px 10px;
+            text-align: center;
+        }
+
+        .empty p {
+            margin: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            color: #92A3BA;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.6px;
+            text-align: left;
+            padding: 12px 24px;
+            border-bottom: 1px solid #22344D;
+        }
+
+        td {
+            color: #D5DCE5;
+            padding: 16px 24px;
+            border-bottom: 1px solid #1A2A40;
+            vertical-align: top;
+            line-height: 1.5;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .step {
+            color: #92A3BA;
+            font-weight: 600;
+        }
+
+        /* ---------- tiers (red = at risk, green = stable) ---------- */
+
+        .accent-red {
+            border-top: 3px solid #F87171;
+        }
+
+        .accent-green {
+            border-top: 3px solid #34D399;
+        }
+
+        .tier-red {
+            color: #F87171;
+            background-color: rgba(248, 113, 113, 0.12);
+        }
+
+        .tier-green {
+            color: #34D399;
+            background-color: rgba(52, 211, 153, 0.12);
+        }
+
+        .text-red {
+            color: #F87171 !important;
+        }
+
+        .text-green {
+            color: #34D399 !important;
+        }
+
+        .dot-red {
+            background-color: #F87171;
+        }
+
+        .dot-green {
+            background-color: #34D399;
+        }
+
+
+        .tier {
+            display: inline-block;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .list {
+            padding-top: 6px;
+            padding-bottom: 6px;
+        }
+
+        .list-item {
+            display: flex;
+            padding: 14px 0;
+            border-bottom: 1px solid #1A2A40;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-item p {
+            margin: 0;
+        }
+
+        .item-name {
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 3px !important;
+        }
+
+        .item-text {
+            color: #B8C4D4;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin: 7px 14px 0 2px;
+            flex-shrink: 0;
+        }
+
+        .numbered {
+            counter-reset: step;
+        }
+
+        .numbered .list-item::before {
+            counter-increment: step;
+            content: counter(step);
+            color: #92A3BA;
+            font-weight: 600;
+            font-size: 14px;
+            width: 26px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+
+        .model-strip {
+            display: flex;
+        }
+
+        .model-strip div {
+            flex: 1;
+            padding: 18px 24px;
+            border-right: 1px solid #22344D;
+        }
+
+        .model-strip div:last-child {
+            border-right: none;
+        }
+
+        .model-strip p {
+            margin: 0;
+        }
+
+        .strip-label {
+            color: #92A3BA;
+            font-size: 12px;
+            margin-bottom: 4px !important;
+        }
+
+        .strip-value {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+        }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css') }}">
+</head>
+<body>
+
+    <div class="page-layout">
+
+        <div class="sidebar">
+
+           <a href="{{ url_for('home') }}">
+    <img class="company-logo"
+         src="{{ url_for('static', filename='images/Unsolved_Metrics_Website_Logo.png') }}"
+         alt="Unsolved Metrics Logo">
+</a>
+
+            <a class="menu-item" href="{{ url_for('home') }}">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+            </a>
+
+            <a class="menu-item" href="{{ url_for('predict') }}" style="background-color: #263B54; color: white;">
+                <i class="fa-solid fa-brain"></i>
+                Make Prediction
+            </a>
+
+            <a class="menu-item" href="{{ url_for('dataset') }}">
+                <i class="fa-solid fa-database"></i>
+                View Dataset
+            </a>
+
+            <a class="menu-item" href="{{ url_for('insights') }}">
+                <i class="fa-solid fa-chart-pie"></i>
+                Customer Intelligence
+            </a>
+
+            <a class="menu-item" href="{{ url_for('models') }}">
+                <i class="fa-solid fa-trophy"></i>
+                Model Selection
+            </a>
+
+            <a class="menu-item" href="{{ url_for('about') }}">
+                <i class="fa-solid fa-circle-info"></i>
+                About
+            </a>
+
+        </div>
+
+        <div class="main-content">
+
+            <!-- work out the screen colour and tier from the prediction -->
+            {% if probability is defined %}
+                {% set red = probability >= 50 %}
+                {% set colour = "red" if red else "green" %}
+                {% set auto_pay = payment_method in ["Credit Card", "Debit Card", "PayPal"] %}
+                {% set top = [100 - rank, 1] | max %}
+                {% set strong = (1 if top <= 25 else 0) + (1 if number_of_profiles >= 4 else 0) + (1 if auto_pay else 0) %}
+                {% set any_risk = last_login_days > 30 or watch_hours <= 7.79 or not auto_pay or plan == "Basic" or number_of_profiles < 4 %}
+                {% set any_growth = top <= 25 or number_of_profiles >= 4 or auto_pay or last_login_days <= 7 %}
+                {% if red %}
+                    {% set tier = "Critical At-Risk" %}
+                {% elif strong >= 2 %}
+                    {% set tier = "Elite Growth & Stable" %}
+                {% else %}
+                    {% set tier = "Stable" %}
+                {% endif %}
+            {% endif %}
+
+            <!-- 1. PAGE HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1>Make Prediction</h1>
+                    <p class="muted">Assess a subscriber's churn risk and get an action plan for their account.</p>
+                </div>
+                <p class="model-meta">Model <b>XGBoost</b> &nbsp;·&nbsp; Test accuracy <b>96.4%</b></p>
+            </div>
+
+
+            <div class="layout">
+
+                <!-- 2. SUBSCRIBER DETAILS -->
+                <div class="card" style="width: 56%; margin-right: 20px;">
+                    <div class="card-header">
+                        <h2>Subscriber details</h2>
+                        <p>All fields are required.</p>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('predict') }}">
+                            <div class="form-grid">
+
+                            <div class="field">
+                                <label for="watch_hours">Watch hours</label>
+                                <input type="number" id="watch_hours" name="watch_hours" min="0" max="500" step="any"
+                                       placeholder="e.g. 12.5" value="{{ request.form.get('watch_hours', '') }}" required>
+                                <p class="hint">Total hours watched this month</p>
+                            </div>
+
+                            <div class="field">
+                                <label for="last_login_days">Days since last login</label>
+                                <input type="number" id="last_login_days" name="last_login_days" min="0" max="60" step="1"
+                                       placeholder="e.g. 24" value="{{ request.form.get('last_login_days', '') }}" required>
+                                <p class="hint">0 to 60</p>
+                            </div>
+
+                            <div class="field">
+                                <label for="subscription_type">Subscription plan</label>
+                                <select id="subscription_type" name="subscription_type" required>
+                                    <option value="" disabled {% if not request.form.get('subscription_type') %}selected{% endif %}>Select</option>
+                                    <option value="Basic" {% if request.form.get('subscription_type') == 'Basic' %}selected{% endif %}>Basic</option>
+                                    <option value="Standard" {% if request.form.get('subscription_type') == 'Standard' %}selected{% endif %}>Standard</option>
+                                    <option value="Premium" {% if request.form.get('subscription_type') == 'Premium' %}selected{% endif %}>Premium</option>
+                                </select>
+                                <p class="hint">Sets the monthly fee</p>
+                            </div>
+
+                            <div class="field">
+                                <label for="number_of_profiles">Number of profiles</label>
+                                <select id="number_of_profiles" name="number_of_profiles" required>
+                                    <option value="" disabled {% if not request.form.get('number_of_profiles') %}selected{% endif %}>Select</option>
+                                    <option value="1" {% if request.form.get('number_of_profiles') == '1' %}selected{% endif %}>1</option>
+                                    <option value="2" {% if request.form.get('number_of_profiles') == '2' %}selected{% endif %}>2</option>
+                                    <option value="3" {% if request.form.get('number_of_profiles') == '3' %}selected{% endif %}>3</option>
+                                    <option value="4" {% if request.form.get('number_of_profiles') == '4' %}selected{% endif %}>4</option>
+                                    <option value="5" {% if request.form.get('number_of_profiles') == '5' %}selected{% endif %}>5</option>
+                                </select>
+                                <p class="hint">Profiles on the account</p>
+                            </div>
+
+                            <div class="field">
+                                <label for="avg_watch_time_per_day">Average watch time per day</label>
+                                <input type="number" id="avg_watch_time_per_day" name="avg_watch_time_per_day" min="0" max="1440" step="any"
+                                       placeholder="e.g. 30" value="{{ request.form.get('avg_watch_time_per_day', '') }}" required>
+                                <p class="hint">In minutes</p>
+                            </div>
+
+                            <div class="field">
+                                <label for="payment_method">Payment method</label>
+                                <select id="payment_method" name="payment_method" required>
+                                    <option value="" disabled {% if not request.form.get('payment_method') %}selected{% endif %}>Select</option>
+                                    <option value="Credit Card" {% if request.form.get('payment_method') == 'Credit Card' %}selected{% endif %}>Credit Card</option>
+                                    <option value="Debit Card" {% if request.form.get('payment_method') == 'Debit Card' %}selected{% endif %}>Debit Card</option>
+                                    <option value="PayPal" {% if request.form.get('payment_method') == 'PayPal' %}selected{% endif %}>PayPal</option>
+                                    <option value="Gift Card" {% if request.form.get('payment_method') == 'Gift Card' %}selected{% endif %}>Gift Card</option>
+                                    <option value="Crypto" {% if request.form.get('payment_method') == 'Crypto' %}selected{% endif %}>Crypto</option>
+                                </select>
+                                <p class="hint">How the subscription is paid</p>
+                            </div>
+
+                            </div>
+
+                            <div class="form-footer">
+                                <a class="button-secondary" href="{{ url_for('predict') }}">Clear</a>
+                                <button class="button-primary" type="submit">Run prediction</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+
+                <!-- 3. ACCOUNT STATUS -->
+                <div class="card {% if probability is defined %}accent-{{ colour }}{% endif %}" style="width: 44%;">
+                    <div class="card-header">
+                        <h2>Account status</h2>
+                        <p>Based on the details entered.</p>
+                    </div>
+                    <div class="card-body">
+
+                        {% if probability is defined %}
+
+                        <span class="tier tier-{{ colour }}">{{ tier }}</span>
+
+                        <div class="details">
+                            <div class="detail-row"><span>Alert tier</span><span>{{ tier }}</span></div>
+                            <div class="detail-row"><span>Churn probability</span><span class="text-{{ colour }}">{{ probability }}%</span></div>
+                            <div class="detail-row"><span>Response urgency</span><span>{% if red %}Immediate action required (&lt; 12 hours){% else %}Standard marketing lifecycle loop{% endif %}</span></div>
+                        </div>
+
+                        <p class="footnote">Churn probability of 50% or more is at risk; under 50% is stable.</p>
+
+                        {% else %}
+
+                        <div class="empty">
+                            <p style="color: white; font-weight: 600; margin-bottom: 6px;">No assessment yet</p>
+                            <p class="muted" style="font-size: 14px;">Enter the subscriber's details and run the prediction.</p>
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- 4. DRIVERS AND ACTION PLAN (shown after a prediction) -->
+            {% if probability is defined %}
+            <div class="layout">
+
+                {% if red %}
+
+                <!-- RED: at-risk subscriber -->
+                <div class="card accent-red" style="width: 40%; margin-right: 20px;">
+                    <div class="card-header">
+                        <h2>Primary risk drivers</h2>
+                        <p>Why this subscriber may leave.</p>
+                    </div>
+                    <div class="card-body list">
+                        {% if last_login_days > 30 %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Activity stagnation</p><p class="item-text">No logins recorded in the last {{ '%g' % last_login_days }} days.</p></div></div>
+                        {% endif %}
+                        {% if watch_hours <= 7.79 %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Consumption collapse</p><p class="item-text">Only {{ '%g' % watch_hours }} hours of viewing this month, lower than {{ 100 - rank }}% of subscribers.</p></div></div>
+                        {% endif %}
+                        {% if not auto_pay %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Billing vulnerability</p><p class="item-text">High-friction manual renewal via {{ 'prepaid gift cards' if payment_method == 'Gift Card' else 'manual crypto payments' }}.</p></div></div>
+                        {% endif %}
+                        {% if plan == "Basic" %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Entry-tier plan</p><p class="item-text">Basic subscribers have the highest churn rate of the three plans.</p></div></div>
+                        {% endif %}
+                        {% if number_of_profiles < 4 %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Small household footprint</p><p class="item-text">Only {{ number_of_profiles }} {{ 'profile' if number_of_profiles == 1 else 'profiles' }} on the account.</p></div></div>
+                        {% endif %}
+                        {% if not any_risk %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Combined risk</p><p class="item-text">No single dominant driver; the risk comes from the combination of their details.</p></div></div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card accent-red" style="width: 60%;">
+                    <div class="card-header">
+                        <h2>Remediation action plan</h2>
+                        <p>How to keep this subscriber, matched to each risk driver.</p>
+                    </div>
+                    <div class="card-body list numbered">
+                        {% if last_login_days > 30 %}
+                        <div class="list-item"><div><p class="item-name">Inactivity recovery</p><p class="item-text">Dispatch a targeted email showcasing new releases tailored to their past viewing history to prompt a login.</p></div></div>
+                        {% endif %}
+                        {% if watch_hours <= 7.79 %}
+                        <div class="list-item"><div><p class="item-name">Engagement kickstart</p><p class="item-text">Reset their home screen to highlight major trending titles instead of their current stale viewing queue.</p></div></div>
+                        {% endif %}
+                        {% if not auto_pay %}
+                        <div class="list-item"><div><p class="item-name">Billing conversion</p><p class="item-text">Offer a temporary $2 monthly credit if they switch from {{ payment_method | lower }} renewals to automatic card billing.</p></div></div>
+                        {% endif %}
+                        {% if plan == "Basic" %}
+                        <div class="list-item"><div><p class="item-name">Value demonstration</p><p class="item-text">Gift a free 14-day trial of the Standard multi-screen tier so more people in the house start using the service.</p></div></div>
+                        {% endif %}
+                        {% if number_of_profiles < 4 %}
+                        <div class="list-item"><div><p class="item-name">Household expansion</p><p class="item-text">Send an in-app prompt inviting them to create viewer profiles for family members to increase long-term account dependency.</p></div></div>
+                        {% endif %}
+                        {% if not any_risk %}
+                        <div class="list-item"><div><p class="item-name">Proactive outreach</p><p class="item-text">Contact them with a personalised retention offer before the next billing date.</p></div></div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% else %}
+
+                <!-- GREEN: stable subscriber -->
+                <div class="card accent-green" style="width: 40%; margin-right: 20px;">
+                    <div class="card-header">
+                        <h2>Primary growth drivers</h2>
+                        <p>Why this subscriber is likely to stay.</p>
+                    </div>
+                    <div class="card-body list">
+                        {% if top <= 25 %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Peak engagement</p><p class="item-text">Viewing hours rank in the top {{ top }}% of all subscribers.</p></div></div>
+                        {% endif %}
+                        {% if number_of_profiles == 5 %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">High household footprint</p><p class="item-text">Maximum of 5 viewer profiles in use.</p></div></div>
+                        {% elif number_of_profiles == 4 %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Strong household footprint</p><p class="item-text">4 viewer profiles in use.</p></div></div>
+                        {% endif %}
+                        {% if auto_pay %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Frictionless revenue</p><p class="item-text">Linked to automatic renewal via {{ payment_method if payment_method == 'PayPal' else payment_method | lower }}.</p></div></div>
+                        {% endif %}
+                        {% if last_login_days <= 7 %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Recently active</p><p class="item-text">Last login {{ '%g' % last_login_days }} days ago.</p></div></div>
+                        {% endif %}
+                        {% if not any_growth %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Low churn probability</p><p class="item-text">The model expects this subscriber to stay.</p></div></div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card accent-green" style="width: 60%;">
+                    <div class="card-header">
+                        <h2>Expansion action plan</h2>
+                        <p>How to grow the value of this account.</p>
+                    </div>
+                    <div class="card-body list numbered">
+                        {% if plan != "Premium" and top <= 50 %}
+                        <div class="list-item"><div><p class="item-name">Premium upsell</p><p class="item-text">Their high usage makes them a strong fit for an upgrade to the Premium 4K Ultra HD tier for better picture quality.</p></div></div>
+                        {% endif %}
+                        <div class="list-item"><div><p class="item-name">Tenure lock-in</p><p class="item-text">Offer upfront annual billing at a 15% discount (${{ '%.2f' % (monthly_fee * 12 * 0.85) }} a year) in exchange for a 12-month commitment.</p></div></div>
+                        {% if top <= 25 %}
+                        <div class="list-item"><div><p class="item-name">Advocacy onboarding</p><p class="item-text">Invite them into an exclusive pre-release screening club to test new features and preview unreleased series.</p></div></div>
+                        {% endif %}
+                        <div class="list-item"><div><p class="item-name">Viral acquisition</p><p class="item-text">Provide a unique referral code in their app that gives friends a free 30-day trial on a new account.</p></div></div>
+                        <div class="list-item"><div><p class="item-name">Cross-device saturation</p><p class="item-text">Send a mobile notification encouraging them to install the app on their tablets and phones for viewing away from home.</p></div></div>
+                    </div>
+                </div>
+
+                {% endif %}
+
+            </div>
+            {% endif %}
+
+
+            <!-- 5. MODEL PERFORMANCE -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Model performance</h2>
+                    <p>XGBoost classifier, 7 features selected with SelectKBest (chi²), evaluated on 1,500 test customers.</p>
+                </div>
+                <div class="model-strip">
+                    <div><p class="strip-label">Accuracy</p><p class="strip-value">96.4%</p></div>
+                    <div><p class="strip-label">Precision</p><p class="strip-value">97.4%</p></div>
+                    <div><p class="strip-label">Recall</p><p class="strip-value">95.3%</p></div>
+                    <div><p class="strip-label">F1 score</p><p class="strip-value">96.3%</p></div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
