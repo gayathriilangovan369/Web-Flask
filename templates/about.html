@@ -378,10 +378,9 @@
                 <h1>About <span class="blue-word">Unsolved Metrics</span></h1>
                 <p class="tagline">Where intelligence meets the unknown.</p>
                 <p class="banner-text">
-                    This is a customer churn prediction project built on a Netflix customer dataset.
-                    It uses exploratory data analysis to uncover patterns in customer behaviour, and an XGBoost
-                    machine learning model to predict which subscribers are likely to cancel. The app shows who is leaving,
-                    the early warning signs to watch for, and how much revenue is at risk.
+                    This project analyses customer churn for a subscription streaming service using exploratory data analysis,
+                    statistical testing and machine learning. The website presents the key findings and provides a tool
+                    to assess an individual subscriber's churn risk.
                 </p>
             </div>
 
@@ -393,8 +392,7 @@
                 <p class="section-text">
                     Netflix earns its revenue from monthly subscriptions, so every cancellation is recurring revenue lost.
                     Winning a new subscriber costs far more than keeping an existing one, yet unhappy customers are usually
-                    only noticed once they have already left. This project explores 5,000 customer records to understand
-                    churn before it happens.
+                    only noticed once they have already left.
                 </p>
 
                 <div class="row" style="margin: 18px 0 0 0;">
@@ -458,15 +456,15 @@
             <!-- 4. METHODOLOGY -->
             <div class="box" style="margin-bottom: 20px;">
                 <p class="small-title">METHODOLOGY</p>
-                <h2 class="section-title">From raw data to a working web application</h2>
-                <p class="grey-text" style="margin: 0;">An end-to-end workflow covering data preparation, statistical analysis, machine learning and a web application.</p>
+                <h2 class="section-title">From raw data to deployment</h2>
+                <p class="grey-text" style="margin: 0;">An end-to-end workflow covering data preparation, statistical analysis, machine learning and deployment.</p>
 
                 <div class="table-area">
                     <table>
                         <tr><th>STAGE</th><th>APPROACH</th><th>TOOLS</th></tr>
                         <tr>
                             <td class="white">1 · Data preparation &amp; feature engineering</td>
-                            <td>Audited and cleansed the raw customer data (5,000 records, 14 columns), handling 2,100 missing values across 10 columns and removing a blank row. For the exploratory analysis, engineered 15 calculated fields across churn and revenue, engagement, customer profile, and risk and segmentation.</td>
+                            <td>Audited and cleansed the raw customer data (5,000 records, 14 columns), treating 2,100 missing values across 10 columns. Engineered 15 calculated fields for the exploratory analysis, covering churn and revenue, engagement, customer profile, and risk segmentation.</td>
                             <td><span class="tool">Python</span><span class="tool">pandas</span><span class="tool">NumPy</span></td>
                         </tr>
                         <tr>
@@ -485,8 +483,8 @@
                             <td><span class="tool">scikit-learn</span><span class="tool">XGBoost</span><span class="tool">CatBoost</span></td>
                         </tr>
                         <tr>
-                            <td class="white">5 · Web application</td>
-                            <td>Delivered the analysis and trained model as a Flask web application, giving stakeholders direct access to the data, insights and churn predictions.</td>
+                            <td class="white">5 · Deployment</td>
+                            <td>Deployed the analysis and final model as a Flask website, giving stakeholders access to the data, insights and churn predictions.</td>
                             <td><span class="tool">Flask</span><span class="tool">HTML</span><span class="tool">CSS</span></td>
                         </tr>
                     </table>
@@ -512,7 +510,7 @@
                         </tr>
                         <tr>
                             <td><a class="page-link" href="{{ url_for('dataset') }}"><i class="fa-solid fa-database"></i> View Dataset</a></td>
-                            <td>A sample of the raw customer data (5,000 records), with the full CSV to download.</td>
+                            <td>A sample of the customer data, with all 5,000 records available to download.</td>
                         </tr>
                         <tr>
                             <td><a class="page-link" href="{{ url_for('insights') }}"><i class="fa-solid fa-chart-pie"></i> Customer Intelligence</a></td>
