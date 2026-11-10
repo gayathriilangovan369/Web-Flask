@@ -598,4 +598,207 @@
                                     <option value="4" {% if request.form.get('number_of_profiles') == '4' %}selected{% endif %}>4</option>
                                     <option value="5" {% if request.form.get('number_of_profiles') == '5' %}selected{% endif %}>5</option>
                                 </select>
-                                <p class="hint">Profiles
+                                <p class="hint">Profiles on the account</p>
+                            </div>
+
+                            <div class="field">
+                                <label for="avg_watch_time_per_day">Average watch time per day</label>
+                                <input type="number" id="avg_watch_time_per_day" name="avg_watch_time_per_day" min="0" max="1440" step="any"
+                                       placeholder="e.g. 45" value="{{ request.form.get('avg_watch_time_per_day', '') }}" required>
+                                <p class="hint">In minutes</p>
+                            </div>
+
+                            <div class="field">
+                                <label for="payment_method">Payment method</label>
+                                <select id="payment_method" name="payment_method" required>
+                                    <option value="" disabled {% if not request.form.get('payment_method') %}selected{% endif %}>Select</option>
+                                    <option value="Credit Card" {% if request.form.get('payment_method') == 'Credit Card' %}selected{% endif %}>Credit Card</option>
+                                    <option value="Debit Card" {% if request.form.get('payment_method') == 'Debit Card' %}selected{% endif %}>Debit Card</option>
+                                    <option value="PayPal" {% if request.form.get('payment_method') == 'PayPal' %}selected{% endif %}>PayPal</option>
+                                    <option value="Gift Card" {% if request.form.get('payment_method') == 'Gift Card' %}selected{% endif %}>Gift Card</option>
+                                    <option value="Crypto" {% if request.form.get('payment_method') == 'Crypto' %}selected{% endif %}>Crypto</option>
+                                </select>
+                                <p class="hint">How the subscription is paid</p>
+                            </div>
+
+                            </div>
+
+                            <div class="form-footer">
+                                <a class="button-secondary" href="{{ url_for('predict') }}">Clear</a>
+                                <button class="button-primary" type="submit">Run prediction</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+
+                <!-- 3. ACCOUNT STATUS -->
+                <div class="card {% if probability is defined %}accent-{{ colour }}{% endif %}" style="width: 44%;">
+                    <div class="card-header">
+                        <h2>Account status</h2>
+                        <p>Based on the details entered.</p>
+                    </div>
+                    <div class="card-body">
+
+                        {% if probability is defined %}
+
+                        <span class="tier tier-{{ colour }}">{{ tier }}</span>
+
+                        <div class="details">
+                            <div class="detail-row"><span>Alert tier</span><span>{{ tier }}</span></div>
+                            <div class="detail-row"><span>Churn probability</span><span class="text-{{ colour }}">{{ probability }}%</span></div>
+                            <div class="detail-row"><span>Response urgency</span><span>{% if red %}Immediate action required{% else %}Standard marketing lifecycle loop{% endif %}</span></div>
+                        </div>
+
+                        <p class="footnote">Churn probability of 50% or more is at risk; under 50% is stable.</p>
+
+                        {% else %}
+
+                        <div class="empty">
+                            <p style="color: white; font-weight: 600; margin-bottom: 6px;">No assessment yet</p>
+                            <p class="muted" style="font-size: 14px;">Enter the subscriber's details and run the prediction.</p>
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- 4. DRIVERS AND ACTION PLAN (shown after a prediction) -->
+            {% if probability is defined %}
+            <div class="layout">
+
+                {% if red %}
+
+                <!-- RED: at-risk subscriber -->
+                <div class="card accent-red" style="width: 40%; margin-right: 20px;">
+                    <div class="card-header">
+                        <h2>Primary risk drivers</h2>
+                        <p>Why this subscriber may leave.</p>
+                    </div>
+                    <div class="card-body list">
+                        {% if last_login_days > 30 %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Activity stagnation</p><p class="item-text">No logins recorded in the last {{ '%g' % last_login_days }} days.</p></div></div>
+                        {% endif %}
+                        {% if watch_hours <= 7.79 %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Consumption collapse</p><p class="item-text">Only {{ '%g' % watch_hours }} hours of viewing this month, lower than {{ 100 - rank }}% of subscribers.</p></div></div>
+                        {% endif %}
+                        {% if not auto_pay %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Billing vulnerability</p><p class="item-text">High-friction manual renewal via {{ 'prepaid gift cards' if payment_method == 'Gift Card' else 'crypto' }}.</p></div></div>
+                        {% endif %}
+                        {% if plan == "Basic" %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Entry-tier plan</p><p class="item-text">Basic subscribers have the highest churn rate of the three plans.</p></div></div>
+                        {% endif %}
+                        {% if number_of_profiles < 4 %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Small household footprint</p><p class="item-text">Only {{ number_of_profiles }} {{ 'profile' if number_of_profiles == 1 else 'profiles' }} on the account.</p></div></div>
+                        {% endif %}
+                        {% if not any_risk %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Combined risk</p><p class="item-text">No single dominant driver; the risk comes from the combination of their details.</p></div></div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card accent-red" style="width: 60%;">
+                    <div class="card-header">
+                        <h2>Remediation action plan</h2>
+                        <p>How to keep this subscriber, matched to each risk driver.</p>
+                    </div>
+                    <div class="card-body list numbered">
+                        {% if last_login_days > 30 %}
+                        <div class="list-item"><div><p class="item-name">Inactivity recovery</p><p class="item-text">Dispatch a targeted email showcasing new releases tailored to their past viewing history to prompt a login.</p></div></div>
+                        {% endif %}
+                        {% if watch_hours <= 7.79 %}
+                        <div class="list-item"><div><p class="item-name">Engagement kickstart</p><p class="item-text">Reset their home screen to highlight major trending titles instead of their current stale viewing queue.</p></div></div>
+                        {% endif %}
+                        {% if not auto_pay %}
+                        <div class="list-item"><div><p class="item-name">Billing conversion</p><p class="item-text">Offer a temporary $2 monthly credit if they switch from {{ payment_method | lower }} renewals to automatic card billing.</p></div></div>
+                        {% endif %}
+                        {% if plan == "Basic" %}
+                        <div class="list-item"><div><p class="item-name">Value demonstration</p><p class="item-text">Offer a free 14-day trial of the Standard plan so more people in the household start using the service.</p></div></div>
+                        {% endif %}
+                        {% if number_of_profiles < 4 %}
+                        <div class="list-item"><div><p class="item-name">Household expansion</p><p class="item-text">Send an in-app prompt inviting them to create viewer profiles for family members to increase long-term account dependency.</p></div></div>
+                        {% endif %}
+                        {% if not any_risk %}
+                        <div class="list-item"><div><p class="item-name">Proactive outreach</p><p class="item-text">Contact them with a personalised retention offer before the next billing date.</p></div></div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% else %}
+
+                <!-- GREEN: stable subscriber -->
+                <div class="card accent-green" style="width: 40%; margin-right: 20px;">
+                    <div class="card-header">
+                        <h2>Primary growth drivers</h2>
+                        <p>Why this subscriber is likely to stay.</p>
+                    </div>
+                    <div class="card-body list">
+                        {% if top <= 25 %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Peak engagement</p><p class="item-text">Viewing hours rank in the top {{ top }}% of all subscribers.</p></div></div>
+                        {% endif %}
+                        {% if number_of_profiles == 5 %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">High household footprint</p><p class="item-text">Maximum of 5 viewer profiles in use.</p></div></div>
+                        {% elif number_of_profiles == 4 %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Strong household footprint</p><p class="item-text">4 viewer profiles in use.</p></div></div>
+                        {% endif %}
+                        {% if auto_pay %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Frictionless revenue</p><p class="item-text">Linked to automatic renewal via {{ payment_method if payment_method == 'PayPal' else payment_method | lower }}.</p></div></div>
+                        {% endif %}
+                        {% if last_login_days <= 7 %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Recently active</p><p class="item-text">{% if last_login_days == 0 %}Logged in today.{% elif last_login_days == 1 %}Last login 1 day ago.{% else %}Last login {{ '%g' % last_login_days }} days ago.{% endif %}</p></div></div>
+                        {% endif %}
+                        {% if not any_growth %}
+                        <div class="list-item"><span class="dot dot-{{ colour }}"></span><div><p class="item-name">Low churn probability</p><p class="item-text">The model expects this subscriber to stay.</p></div></div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card accent-green" style="width: 60%;">
+                    <div class="card-header">
+                        <h2>Expansion action plan</h2>
+                        <p>How to grow the value of this account.</p>
+                    </div>
+                    <div class="card-body list numbered">
+                        {% if plan != "Premium" and top <= 50 %}
+                        <div class="list-item"><div><p class="item-name">Premium upsell</p><p class="item-text">Their high usage makes them a strong fit for an upgrade to the Premium plan.</p></div></div>
+                        {% endif %}
+                        <div class="list-item"><div><p class="item-name">Tenure lock-in</p><p class="item-text">Offer upfront annual billing at a 15% discount (${{ '%.2f' % (monthly_fee * 12 * 0.85) }} a year) in exchange for a 12-month commitment.</p></div></div>
+                        {% if top <= 25 %}
+                        <div class="list-item"><div><p class="item-name">Advocacy onboarding</p><p class="item-text">Invite them into an exclusive pre-release screening club to test new features and preview unreleased series.</p></div></div>
+                        {% endif %}
+                        <div class="list-item"><div><p class="item-name">Viral acquisition</p><p class="item-text">Provide a unique referral code in their app that gives friends a free 30-day trial on a new account.</p></div></div>
+                        <div class="list-item"><div><p class="item-name">Cross-device saturation</p><p class="item-text">Send a mobile notification encouraging them to install the app on their tablets and phones for viewing away from home.</p></div></div>
+                    </div>
+                </div>
+
+                {% endif %}
+
+            </div>
+            {% endif %}
+
+
+            <!-- 5. MODEL PERFORMANCE -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Model performance</h2>
+                    <p>XGBoost classifier, 7 features selected with SelectKBest (chi-square), evaluated on 1,500 test customers.</p>
+                </div>
+                <div class="model-strip">
+                    <div><p class="strip-label">Accuracy</p><p class="strip-value">96.4%</p></div>
+                    <div><p class="strip-label">Precision</p><p class="strip-value">97.4%</p></div>
+                    <div><p class="strip-label">Recall</p><p class="strip-value">95.3%</p></div>
+                    <div><p class="strip-label">F1 score</p><p class="strip-value">96.3%</p></div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
