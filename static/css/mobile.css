@@ -1,5 +1,154 @@
-/* Sidebar stays in place while the page scrolls */
+/* ===== Sidebar on computer screens: stays in place while the page scrolls ===== */
 .sidebar {
     position: sticky;
     top: 0;
+}
+
+/* ===== Phone and tablet layout (screens narrower than 900px) ===== */
+@media (max-width: 900px) {
+
+    /* slim top bar: small logo + menu in one row that scrolls sideways */
+    .page-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        width: 100% !important;
+        height: auto !important;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        overflow-x: auto;
+        padding: 6px 8px;
+        box-sizing: border-box;
+        border-right: none;
+        border-bottom: 1px solid #34465D;
+    }
+
+    .sidebar > a:first-child {
+        flex-shrink: 0;
+    }
+
+    .company-logo {
+        width: 64px;
+        margin: 0 6px 0 0;
+    }
+
+    .menu-item {
+        flex-shrink: 0;
+        font-size: 13px;
+        padding: 8px 10px;
+        margin: 0 2px;
+    }
+
+    .menu-item i {
+        width: auto;
+        margin-right: 5px;
+    }
+
+    /* main area uses the full width */
+    .main-content {
+        padding: 14px;
+        box-sizing: border-box;
+    }
+
+    /* big sections stack */
+    .layout,
+    .banner,
+    .steps,
+    .page-header,
+    .model-strip {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .row {
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .row > *,
+    .layout > *,
+    .podium,
+    .question-card,
+    .step,
+    .field {
+        width: 100% !important;
+        margin-right: 0 !important;
+        margin-bottom: 12px;
+        box-sizing: border-box;
+    }
+
+    /* number tiles and fact boxes: two side by side */
+    .row > .tile,
+    .row > .stat {
+        width: 48.5% !important;
+        padding: 14px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tile-icon,
+    .stat-icon {
+        margin: 0 0 8px 0;
+    }
+
+    .facts {
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .fact {
+        flex: none;
+        width: 48.5%;
+        margin: 0 0 12px 0 !important;
+        box-sizing: border-box;
+    }
+
+    .step {
+        display: flex;
+        align-items: center;
+        text-align: left;
+        padding: 0;
+    }
+
+    .step-circle {
+        margin: 0 14px 0 0;
+        flex-shrink: 0;
+    }
+
+    .banner {
+        padding: 22px;
+    }
+
+    .banner h1 {
+        font-size: 22px;
+    }
+
+    .winner-card,
+    .churn-box {
+        margin: 20px 0 0 0 !important;
+    }
+
+    .page-header .model-meta {
+        text-align: left;
+        margin-top: 10px;
+    }
+
+    .model-strip div {
+        border-right: none;
+        border-bottom: 1px solid #22344D;
+    }
+
+    /* wide tables scroll sideways instead of breaking the page */
+    .table-area {
+        overflow-x: auto !important;
+    }
+
+    .white {
+        white-space: normal;
+    }
 }
