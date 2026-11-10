@@ -59,7 +59,7 @@ def predict():
     plan = request.form["subscription_type"]
     number_of_profiles = int(request.form["number_of_profiles"])
         # the form asks for minutes; the model was trained on hours
-    avg_watch_time_per_day = float(request.form["avg_watch_time_per_day"]) / 60
+        avg_watch_time_per_day = float(request.form["avg_watch_time_per_day"])
     payment_method = request.form["payment_method"]
 
     monthly_fee = PLAN_FEES[plan]
