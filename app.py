@@ -26,8 +26,12 @@ def home():
 def dataset():
     df = pd.read_csv("Data/Netflix.csv")
 
-    # first 20 rows, numbers rounded, empty cells shown as "-"
-    sample = df.head(20).round(2).fillna("-")
+    # first 20 rows, numbers rounded, whole-number columns shown without ".0", empty cells shown as "-"
+    sample = df.head(20).round(2)
+    for col in sample.select_dtypes("float").columns:
+        if (df[col].dropna() % 1 == 0).all():
+            sample[col] = sample[col].astype("Int64")
+    sample = sample.astype(object).fillna("-")
 
     return render_template(
         "dataset.html",
