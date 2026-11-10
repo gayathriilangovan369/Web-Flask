@@ -1,3 +1,9 @@
+/* ===== Sidebar on computer screens: stays in place while the page scrolls ===== */
+.sidebar {
+    position: sticky;
+    top: 0;
+}
+
 /* ===== Phone and tablet layout (screens narrower than 900px) ===== */
 @media (max-width: 900px) {
 
@@ -7,6 +13,7 @@
     }
 
     .sidebar {
+        position: static;
         width: 100% !important;
         height: auto !important;
         flex-direction: row;
@@ -70,48 +77,3 @@
         margin-bottom: 12px;
         box-sizing: border-box;
     }
-
-    .step {
-        display: flex;
-        align-items: center;
-        text-align: left;
-        padding: 0;
-    }
-
-    .step-circle {
-        margin: 0 14px 0 0;
-        flex-shrink: 0;
-    }
-
-    .banner {
-        padding: 22px;
-    }
-
-    .banner h1 {
-        font-size: 22px;
-    }
-
-    .winner-card,
-    .churn-box {
-        margin: 20px 0 0 0 !important;
-    }
-
-    .page-header .model-meta {
-        text-align: left;
-        margin-top: 10px;
-    }
-
-    .model-strip div {
-        border-right: none;
-        border-bottom: 1px solid #22344D;
-    }
-
-    /* wide tables scroll sideways instead of breaking the page */
-    .table-area {
-        overflow-x: auto !important;
-    }
-
-    .white {
-        white-space: normal;
-    }
-}
